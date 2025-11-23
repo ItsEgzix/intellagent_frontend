@@ -1,0 +1,144 @@
+{
+  "header": {
+    "aboutUs": "About us",
+    "services": "Our Services",
+    "useCases": "Use Cases",
+    "process": "Process",
+    "contactUs": "Contact Us"
+  },
+  "sidebar": {
+    "watchIntro": "WATCH INTRO",
+    "scrollDown": "SCROLL DOWN"
+  },
+  "hero": {
+    "letUs": "Let us",
+    "buildYour": "Build your",
+    "customAIAgent": "Custom AI Agent",
+    "subtitle": "Turn Your Repetitive Work Into Smart, Self-Running Systems"
+  },
+  "aboutUs": {
+    "heading": "About Us",
+    "description": "We are a team of AI experts dedicated to transforming businesses through intelligent automation. Our mission is to help companies eliminate repetitive tasks and unlock their full potential with cutting-edge AI solutions."
+  },
+  "aiVoiceAgent": {
+    "heading": "AI Voice Agent, for sales and customer support",
+    "description": "A platform to create, link and customize sales and marketing agents that are able to do inbound and outbound calls. The agent can be linked to the company data and evaluate how satisfied the customer is.",
+    "featureText": "Always available to drive your sales",
+    "buttonAlt": "Let's have a Chá茶t"
+  },
+  "postGeneration": {
+    "heading": "Automate your Post generation",
+    "description": "A platform where you upload your clients data for context, let the agents search your market and competitors and create your weekly posts.",
+    "featureText": "Faster content generation for your business",
+    "buttonAlt": "Let's have a Chá茶t"
+  },
+  "webAutomation": {
+    "heading": "Web Automation with",
+    "headingChromium": "chromium",
+    "description": "A web Automation Solution that runs a browser in the backend to automate any task from any platform eg, WhatsApp, web scraping etc ...",
+    "featureText": "Always available to drive your sales",
+    "buttonAlt": "Let's have a Chá茶t"
+  },
+  "services": {
+    "heading": "Deliver a high-quality",
+    "headingSmart": "Smart",
+    "headingSystems": "Systems",
+    "description": "Connect AI agents with your business tools to automate repetitive tasks, eliminate busywork",
+    "services": [
+      {
+        "title": "AI Development",
+        "description": "Target analysis is an examination of potential targets to determine military importance."
+      },
+      {
+        "title": "Agentic Systems",
+        "description": "Content optimization is the process of making sure content is written in a way that it can reach."
+      },
+      {
+        "title": "AI Automation",
+        "description": "Content optimization is the process of making sure content is written in a way that it can reach."
+      },
+      {
+        "title": "Web Automation",
+        "description": "Target analysis is an examination of potential targets to determine military importance."
+      },
+      {
+        "title": "LangGraph Apps",
+        "description": "Content optimization is the process of making sure content is written in a way that it can reach."
+      }
+    ]
+  },
+  "useCases": {
+    "heading": "Use cases",
+    "subtext": "Explore how our AI solutions can transform your business operations"
+  },
+  "workingProcess": {
+    "heading": "Our Working",
+    "headingProcess": "Process",
+    "description": "Connect AI agents with your business tools to automate repetitive tasks, eliminate busywork, and free your team to focus on growth.",
+    "steps": [
+      {
+        "title": "Requirement Gathering",
+        "description": "We analyze your business needs, identify bottlenecks, and define clear automation goals."
+      },
+      {
+        "title": "Planning and Design",
+        "description": "We architect a tailored AI solution, designing workflows and selecting the best tools for your stack."
+      },
+      {
+        "title": "Implementation / Development",
+        "description": "We build and integrate custom AI agents to ensure seamless connectivity with your systems."
+      },
+      {
+        "title": "Testing & Refinement",
+        "description": "Rigorous testing ensures accuracy and efficiency, with iterative refinement for optimal performance."
+      },
+      {
+        "title": "Deployment & Support",
+        "description": "We deploy the solution and provide ongoing support to ensure sustained value and adaptability."
+      }
+    ]
+  },
+  "faq": {
+    "heading": "Frequently Asked Questions",
+    "questions": [
+      {
+        "question": "How can I check the progress of the work?",
+        "answer": "Don't worry, we got you covered. You will have FREE Backend, Frontend and database host. When our system update you with changes, you can view them immediately from the website."
+      },
+      {
+        "question": "How about maintenance?",
+        "answer": "We provide ongoing maintenance packages to ensure your AI agents and automations continue to perform optimally as your business evolves."
+      },
+      {
+        "question": "Do you have prove of concept?",
+        "answer": "Yes, we can develop a Proof of Concept (POC) to demonstrate the value and feasibility of the proposed solution before full-scale implementation."
+      },
+      {
+        "question": "How secure is IntellAgent?",
+        "answer": "Security is our top priority. We use industry-standard encryption and follow best practices to ensure your data and your clients' data remain safe and confidential."
+      },
+      {
+        "question": "What makes you different from other providers?",
+        "answer": "We focus on creating tailored, fully integrated systems rather than just standalone chatbots. Our solutions are designed to automate entire workflows, not just answer questions."
+      },
+      {
+        "question": "Where does my company need to be based?",
+        "answer": "We operate globally! Since our solutions are cloud-based, we can work with companies located anywhere in the world."
+      }
+    ]
+  },
+  "footer": {
+    "slogan": "Relax, we get you and we've got you.",
+    "tryServices": "try our services",
+    "newsletter": "Subscribe to our newsletter",
+    "stayInTouch": "STAY IN TOUCH",
+    "links": {
+      "home": "Home",
+      "services": "Services",
+      "news": "News & Events",
+      "aboutUs": "AboutUs",
+      "contact": "Contact"
+    },
+    "copyright": "©2025 INTELLAGENT"
+  }
+}

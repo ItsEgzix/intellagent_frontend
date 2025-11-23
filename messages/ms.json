@@ -1,0 +1,144 @@
+{
+  "header": {
+    "aboutUs": "Tentang kami",
+    "services": "Perkhidmatan Kami",
+    "useCases": "Kes Penggunaan",
+    "process": "Proses",
+    "contactUs": "Hubungi kami"
+  },
+  "sidebar": {
+    "watchIntro": "TONTON PENGENALAN",
+    "scrollDown": "TOLONG SKROL KE BAWAH"
+  },
+  "hero": {
+    "letUs": "Mari kita",
+    "buildYour": "Bina",
+    "customAIAgent": "Ejen AI Tersuai",
+    "subtitle": "Tukar Kerja Berulang Anda Kepada Sistem Pintar yang Berjalan Sendiri"
+  },
+  "aboutUs": {
+    "heading": "Tentang Kami",
+    "description": "Kami adalah pasukan pakar AI yang komited untuk mengubah perniagaan melalui automasi pintar. Misi kami adalah untuk membantu syarikat menghapuskan tugas berulang dan membuka potensi penuh mereka dengan penyelesaian AI terkini."
+  },
+  "aiVoiceAgent": {
+    "heading": "Ejen Suara AI, untuk jualan dan sokongan pelanggan",
+    "description": "Platform untuk mencipta, menghubungkan dan menyesuaikan ejen jualan dan pemasaran yang mampu melakukan panggilan masuk dan keluar. Ejen boleh dihubungkan dengan data syarikat dan menilai tahap kepuasan pelanggan.",
+    "featureText": "Sentiasa tersedia untuk memacu jualan anda",
+    "buttonAlt": "Mari kita berbual"
+  },
+  "postGeneration": {
+    "heading": "Automasikan penjanaan siaran anda",
+    "description": "Platform di mana anda memuat naik data pelanggan untuk konteks, biarkan ejen mencari pasaran dan pesaing anda dan mencipta siaran mingguan anda.",
+    "featureText": "Penjanaan kandungan yang lebih pantas untuk perniagaan anda",
+    "buttonAlt": "Mari kita berbual"
+  },
+  "webAutomation": {
+    "heading": "Automasi Web dengan",
+    "headingChromium": "chromium",
+    "description": "Penyelesaian Automasi Web yang menjalankan pelayar di backend untuk mengautomasikan sebarang tugas dari sebarang platform contohnya, WhatsApp, pengikisan web dll ...",
+    "featureText": "Sentiasa tersedia untuk memacu jualan anda",
+    "buttonAlt": "Mari kita berbual"
+  },
+  "services": {
+    "heading": "Menghasilkan",
+    "headingSmart": "Pintar",
+    "headingSystems": "Sistem berkualiti tinggi",
+    "description": "Sambungkan ejen AI dengan alat perniagaan anda untuk mengautomasikan tugas berulang, menghapuskan kerja sibuk",
+    "services": [
+      {
+        "title": "Pembangunan AI",
+        "description": "Analisis sasaran adalah pemeriksaan sasaran berpotensi untuk menentukan kepentingannya."
+      },
+      {
+        "title": "Sistem Ejen",
+        "description": "Pengoptimuman kandungan adalah proses memastikan kandungan ditulis dengan cara yang boleh dicapai."
+      },
+      {
+        "title": "Automasi AI",
+        "description": "Pengoptimuman kandungan adalah proses memastikan kandungan ditulis dengan cara yang boleh dicapai."
+      },
+      {
+        "title": "Automasi Web",
+        "description": "Analisis sasaran adalah pemeriksaan sasaran berpotensi untuk menentukan kepentingannya."
+      },
+      {
+        "title": "Aplikasi LangGraph",
+        "description": "Pengoptimuman kandungan adalah proses memastikan kandungan ditulis dengan cara yang boleh dicapai."
+      }
+    ]
+  },
+  "useCases": {
+    "heading": "Kes penggunaan",
+    "subtext": "Terokai bagaimana penyelesaian AI kami boleh mengubah operasi perniagaan anda"
+  },
+  "workingProcess": {
+    "heading": "Proses Kerja",
+    "headingProcess": "Kami",
+    "description": "Sambungkan ejen AI dengan alat perniagaan anda untuk mengautomasikan tugas berulang, menghapuskan kerja sibuk, dan membebaskan pasukan anda untuk fokus pada pertumbuhan.",
+    "steps": [
+      {
+        "title": "Keperluan",
+        "description": "Kami menganalisis keperluan perniagaan anda, mengenal pasti kekangan, dan menetapkan matlamat automasi yang jelas."
+      },
+      {
+        "title": "Perancangan dan Reka Bentuk",
+        "description": "Kami merangka penyelesaian AI yang disesuaikan, mereka bentuk aliran kerja dan memilih alat terbaik untuk teknologi anda."
+      },
+      {
+        "title": "Pelaksanaan / Pembangunan",
+        "description": "Kami membina dan mengintegrasikan ejen AI tersuai untuk memastikan sambungan sistem yang lancar."
+      },
+      {
+        "title": "Pengujian & Penambahbaikan",
+        "description": "Pengujian ketat memastikan ketepatan dan kecekapan, dengan penambahbaikan berulang untuk prestasi optimum."
+      },
+      {
+        "title": "Penyebaran & Sokongan",
+        "description": "Kami menggunakan penyelesaian dan menyediakan sokongan berterusan untuk memastikan nilai dan kebolehsuaian yang berterusan."
+      }
+    ]
+  },
+  "faq": {
+    "heading": "Soalan Lazim",
+    "questions": [
+      {
+        "question": "Bagaimana saya boleh menyemak kemajuan kerja?",
+        "answer": "Jangan risau, kami sediakan untuk anda. Anda akan mempunyai hos Backend, Frontend dan pangkalan data PERCUMA. Apabila sistem kami mengemas kini anda dengan perubahan, anda boleh melihatnya serta-merta dari laman web."
+      },
+      {
+        "question": "Bagaimana dengan penyelenggaraan?",
+        "answer": "Kami menyediakan pakej penyelenggaraan berterusan untuk memastikan ejen AI dan automasi anda terus berprestasi secara optimum semasa perniagaan anda berkembang."
+      },
+      {
+        "question": "Adakah anda mempunyai bukti konsep?",
+        "answer": "Ya, kami boleh membangunkan Bukti Konsep (POC) untuk menunjukkan nilai dan kebolehlaksanaan penyelesaian yang dicadangkan sebelum pelaksanaan skala penuh."
+      },
+      {
+        "question": "Seberapa selamat IntellAgent?",
+        "answer": "Keselamatan adalah keutamaan kami. Kami menggunakan penyulitan standard industri dan mengikuti amalan terbaik untuk memastikan data anda dan data pelanggan anda kekal selamat dan sulit."
+      },
+      {
+        "question": "Apa yang membezakan anda daripada penyedia lain?",
+        "answer": "Kami memberi tumpuan kepada mewujudkan sistem yang disesuaikan dan bersepadu sepenuhnya dan bukan hanya chatbot mandiri. Penyelesaian kami direka untuk mengautomasikan keseluruhan aliran kerja, bukan hanya menjawab soalan."
+      },
+      {
+        "question": "Di manakah syarikat saya perlu berpangkalan?",
+        "answer": "Kami beroperasi di peringkat global! Oleh kerana penyelesaian kami berasaskan awan, kami boleh bekerjasama dengan syarikat yang terletak di mana-mana sahaja di dunia."
+      }
+    ]
+  },
+  "footer": {
+    "slogan": "Tenang, kami faham anda dan kami ada untuk anda.",
+    "tryServices": "cuba perkhidmatan kami",
+    "newsletter": "Langgan surat berita kami",
+    "stayInTouch": "KEKAL BERHUBUNG",
+    "links": {
+      "home": "Laman Utama",
+      "services": "Perkhidmatan",
+      "news": "Berita & Acara",
+      "aboutUs": "Tentang Kami",
+      "contact": "Hubungi"
+    },
+    "copyright": "©2025 INTELLAGENT"
+  }
+}
