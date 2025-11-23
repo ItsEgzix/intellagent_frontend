@@ -276,7 +276,11 @@ export default function AdminsPage() {
                       width={80}
                       height={80}
                       className="rounded-full object-cover"
-                      unoptimized={true}
+                      unoptimized={
+                        avatarPreview
+                          ? false
+                          : editingUser.avatar?.includes("localhost") || false
+                      }
                     />
                   </div>
                 )}
@@ -385,7 +389,10 @@ export default function AdminsPage() {
                           width={40}
                           height={40}
                           className="w-full h-full object-cover"
-                          unoptimized={true}
+                          unoptimized={
+                            user.avatar?.includes("localhost") || false
+                          }
+                          loading="lazy"
                         />
                       </div>
                     </td>

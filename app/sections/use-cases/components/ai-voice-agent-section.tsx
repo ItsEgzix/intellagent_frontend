@@ -18,7 +18,7 @@ export default function AIVoiceAgentSection() {
                 width={600}
                 height={600}
                 className="w-full h-auto"
-                priority
+                loading="lazy"
               />
             </div>
           </div>

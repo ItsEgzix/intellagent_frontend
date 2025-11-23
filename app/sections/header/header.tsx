@@ -145,6 +145,7 @@ export default function Header() {
                 width={24}
                 height={24}
                 className="h-6 w-6"
+                loading="lazy"
               />
               <span className="ml-2 text-white text-sm">
                 {locale.toUpperCase()}

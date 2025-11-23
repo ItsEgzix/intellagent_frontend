@@ -132,7 +132,11 @@ export default function AdminDashboard() {
                             width={40}
                             height={40}
                             className="w-full h-full object-cover"
-                            unoptimized={true}
+                            unoptimized={
+                              meeting.agent.avatar?.includes("localhost") ||
+                              false
+                            }
+                            loading="lazy"
                           />
                         </div>
                       )}

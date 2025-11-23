@@ -97,8 +97,7 @@ export default function AgentSelector({
               width={80}
               height={80}
               className="w-full h-full object-cover object-center"
-              quality={100}
-              unoptimized={true}
+              unoptimized={selectedAgent.avatar?.includes("localhost") || false}
             />
           </div>
           {agents.length > 1 && (
@@ -134,8 +133,8 @@ export default function AgentSelector({
                       width={64}
                       height={64}
                       className="w-full h-full object-cover object-center"
-                      quality={100}
-                      unoptimized={true}
+                      unoptimized={agent.avatar?.includes("localhost") || false}
+                      loading="lazy"
                     />
                   </div>
 
