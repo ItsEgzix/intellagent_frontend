@@ -41,3 +41,44 @@ export async function GET(
     );
   }
 }
+
+// POST endpoint to save translation files (called by backend)
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ locale: string }> }
+) {
+  try {
+    const { locale } = await params;
+    const body = await request.json();
+
+    // Verify the request is from the backend (check for a secret token or origin)
+    const authHeader = request.headers.get("authorization");
+    const expectedToken = process.env.TRANSLATION_API_SECRET;
+
+    if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Ensure messages directory exists
+    const messagesDir = path.join(process.cwd(), "messages");
+    if (!fs.existsSync(messagesDir)) {
+      fs.mkdirSync(messagesDir, { recursive: true });
+    }
+
+    // Write the translation file
+    const filePath = path.join(messagesDir, `${locale}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(body, null, 2), "utf-8");
+
+    return NextResponse.json(
+      { success: true, message: `Translation file saved for ${locale}` },
+      { status: 200 }
+    );
+  } catch (error) {
+    const { locale } = await params;
+    console.error(`Error saving language file for ${locale}:`, error);
+    return NextResponse.json(
+      { error: "Failed to save language file" },
+      { status: 500 }
+    );
+  }
+}

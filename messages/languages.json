@@ -23,5 +23,10 @@
     "code": "ja",
     "name": "日本語",
     "nameEn": "日本語"
+  },
+  {
+    "code": "vi",
+    "name": "Tiếng Việt",
+    "nameEn": "Tiếng Việt"
   }
 ]

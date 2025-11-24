@@ -293,6 +293,7 @@ interface ContextShape {
   isSubmitting: boolean;
   errorMessage: string | null;
   animatedMessageIds: Set<string>;
+  setMessage: (message: string) => void;
 }
 
 const FormContext = React.createContext<ContextShape | null>(null);
@@ -517,6 +518,14 @@ function MorphPanel() {
     [sessionId, showForm]
   );
 
+  const setMessage = React.useCallback((msg: string) => {
+    // Dispatch custom event that InputForm will listen to
+    const event = new CustomEvent("set-chat-message", {
+      detail: { message: msg },
+    });
+    window.dispatchEvent(event);
+  }, []);
+
   const ctx = React.useMemo(
     () => ({
       showForm,
@@ -528,6 +537,7 @@ function MorphPanel() {
       isSubmitting,
       errorMessage,
       animatedMessageIds,
+      setMessage,
     }),
     [
       showForm,
@@ -539,8 +549,14 @@ function MorphPanel() {
       isSubmitting,
       errorMessage,
       animatedMessageIds,
+      setMessage,
     ]
   );
+
+  // Update global ref
+  React.useEffect(() => {
+    formContextRef = ctx;
+  }, [ctx]);
 
   return (
     <motion.div
@@ -618,13 +634,21 @@ function DockBar() {
 }
 
 const SUGGESTIONS = [
-  { title: "Explain what IntellAgent", subtitle: "can build for my business" },
-  { title: "Help me choose", subtitle: "the right AI-led service package" },
   {
-    title: "Draft a client pitch",
-    subtitle: "for IntellAgent's automation studio",
+    title: "You couldn't find your language?",
+    subtitle: "I can translate the website for you",
+    message: "translate the website to ..",
   },
-  { title: "Outline the steps to", subtitle: "launch an IntellAgent project" },
+  {
+    title: "Wanna see a proof of concept",
+    subtitle: "of web automation? Ask me to schedule a meeting",
+    message: "can you schedule a meeting for me?",
+  },
+  {
+    title: "How IntellAgent is different",
+    subtitle: "from other startups",
+    message: "How IntellAgent is different from other startups",
+  },
 ];
 
 const InputForm = React.forwardRef<HTMLTextAreaElement>((_, ref) => {
@@ -640,6 +664,30 @@ const InputForm = React.forwardRef<HTMLTextAreaElement>((_, ref) => {
   } = useFormContext();
   const btnRef = React.useRef<HTMLButtonElement>(null);
   const [message, setMessage] = React.useState("");
+
+  // Listen for external message setting
+  React.useEffect(() => {
+    const handleSetMessage = (e: Event) => {
+      const customEvent = e as CustomEvent<{ message: string }>;
+      if (customEvent.detail?.message) {
+        setMessage(customEvent.detail.message);
+        setTimeout(() => {
+          if (ref && typeof ref !== "function" && ref.current) {
+            ref.current.focus();
+            ref.current.setSelectionRange(
+              customEvent.detail.message.length,
+              customEvent.detail.message.length
+            );
+          }
+        }, 100);
+      }
+    };
+
+    window.addEventListener("set-chat-message", handleSetMessage);
+    return () => {
+      window.removeEventListener("set-chat-message", handleSetMessage);
+    };
+  }, [ref]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -742,7 +790,9 @@ const InputForm = React.forwardRef<HTMLTextAreaElement>((_, ref) => {
                         key={s.title + s.subtitle}
                         type="button"
                         onClick={() =>
-                          handleSuggestionClick(`${s.title} ${s.subtitle}`)
+                          handleSuggestionClick(
+                            s.message || `${s.title} ${s.subtitle}`
+                          )
                         }
                         className="flex flex-col items-start gap-1 rounded-xl border border-foreground/10 bg-background/50 p-3 text-left text-base transition-colors hover:bg-background/80"
                       >
@@ -897,10 +947,79 @@ function KeyHint({
   );
 }
 
+// Global ref to access form functions
+let formContextRef: ContextShape | null = null;
+
 export function FloatingAIWidget() {
+  const [showLanguageMessage, setShowLanguageMessage] = React.useState(true);
+  const [isFormOpen, setIsFormOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    // Hide message after 10 seconds
+    const timer = setTimeout(() => {
+      setShowLanguageMessage(false);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Listen for form state changes
+  React.useEffect(() => {
+    const checkFormState = () => {
+      if (formContextRef) {
+        setIsFormOpen(formContextRef.showForm);
+      }
+    };
+
+    const interval = setInterval(checkFormState, 100);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleLanguageClick = () => {
+    setShowLanguageMessage(false);
+    if (formContextRef) {
+      formContextRef.triggerOpen();
+      setTimeout(() => {
+        formContextRef?.setMessage("translate the website to ..");
+      }, 100);
+    }
+  };
+
   return (
     <div className="pointer-events-none fixed inset-0 z-50">
-      <div className="pointer-events-auto absolute bottom-6 right-6 max-sm:bottom-4 max-sm:right-4">
+      <div className="pointer-events-auto absolute bottom-6 right-6 max-sm:bottom-4 max-sm:right-4 flex flex-col items-end">
+        {/* Language translation attention message */}
+        <AnimatePresence>
+          {showLanguageMessage && !isFormOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="pointer-events-auto mb-3 cursor-pointer"
+              onClick={handleLanguageClick}
+            >
+              <div
+                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2.5 shadow-lg hover:shadow-xl transition-shadow"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                <span className="text-sm font-medium text-white whitespace-nowrap">
+                  You couldn't find your language? Let me translate
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowLanguageMessage(false);
+                  }}
+                  className="ml-2 rounded-full p-1 hover:bg-white/20 transition-colors"
+                  aria-label="Close message"
+                >
+                  <X className="h-4 w-4 text-white" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <MorphPanel />
       </div>
     </div>

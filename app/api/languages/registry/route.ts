@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -80,5 +80,42 @@ export async function GET() {
       headers: responseHeaders,
       status: 200,
     });
+  }
+}
+
+// POST endpoint to update language registry (called by backend)
+export async function POST(request: NextRequest) {
+  try {
+    // Verify the request is from the backend
+    const authHeader = request.headers.get("authorization");
+    const expectedToken = process.env.TRANSLATION_API_SECRET;
+
+    if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const payload = normalizeRegistryPayload(body);
+
+    // Ensure messages directory exists
+    const messagesDir = path.join(process.cwd(), "messages");
+    if (!fs.existsSync(messagesDir)) {
+      fs.mkdirSync(messagesDir, { recursive: true });
+    }
+
+    // Write the registry file
+    const registryPath = getLanguagesFilePath();
+    fs.writeFileSync(registryPath, JSON.stringify(payload, null, 2), "utf-8");
+
+    return NextResponse.json(
+      { success: true, message: "Language registry updated" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating language registry:", error);
+    return NextResponse.json(
+      { error: "Failed to update language registry" },
+      { status: 500 }
+    );
   }
 }

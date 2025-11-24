@@ -1,0 +1,144 @@
+{
+  "header": {
+    "aboutUs": "Về chúng tôi",
+    "services": "Dịch vụ của chúng tôi",
+    "useCases": "Các trường hợp sử dụng",
+    "process": "Quy trình",
+    "contactUs": "Liên hệ với chúng tôi"
+  },
+  "sidebar": {
+    "watchIntro": "XEM GIỚI THIỆU",
+    "scrollDown": "CUỘN XUỐNG"
+  },
+  "hero": {
+    "letUs": "Hãy để chúng tôi",
+    "buildYour": "Xây dựng",
+    "customAIAgent": "AI Agent tùy chỉnh của bạn",
+    "subtitle": "Biến công việc lặp đi lặp lại của bạn thành các hệ thống thông minh, tự vận hành"
+  },
+  "aboutUs": {
+    "heading": "Về chúng tôi",
+    "description": "Chúng tôi là một đội ngũ chuyên gia về AI, tận tâm chuyển đổi các doanh nghiệp thông qua tự động hóa thông minh. Nhiệm vụ của chúng tôi là giúp các công ty loại bỏ các tác vụ lặp đi lặp lại và khai phá toàn bộ tiềm năng của họ bằng các giải pháp AI tiên tiến."
+  },
+  "aiVoiceAgent": {
+    "heading": "AI Voice Agent, cho bán hàng và hỗ trợ khách hàng",
+    "description": "Một nền tảng để tạo, liên kết và tùy chỉnh các tác nhân bán hàng và tiếp thị có khả năng thực hiện các cuộc gọi đến và đi. Tác nhân có thể được liên kết với dữ liệu công ty và đánh giá mức độ hài lòng của khách hàng.",
+    "featureText": "Luôn sẵn sàng thúc đẩy doanh số bán hàng của bạn",
+    "buttonAlt": "Hãy Chá茶t"
+  },
+  "postGeneration": {
+    "heading": "Tự động hóa việc tạo bài đăng của bạn",
+    "description": "Một nền tảng nơi bạn tải lên dữ liệu khách hàng của mình để làm ngữ cảnh, để các tác nhân tìm kiếm thị trường và đối thủ cạnh tranh của bạn và tạo các bài đăng hàng tuần của bạn.",
+    "featureText": "Tạo nội dung nhanh hơn cho doanh nghiệp của bạn",
+    "buttonAlt": "Hãy Chá茶t"
+  },
+  "webAutomation": {
+    "heading": "Tự động hóa web với",
+    "headingChromium": "chromium",
+    "description": "Một giải pháp tự động hóa web chạy trình duyệt ở phần phụ trợ để tự động hóa bất kỳ tác vụ nào từ bất kỳ nền tảng nào, ví dụ: WhatsApp, thu thập dữ liệu web, v.v.",
+    "featureText": "Luôn sẵn sàng thúc đẩy doanh số bán hàng của bạn",
+    "buttonAlt": "Hãy Chá茶t"
+  },
+  "services": {
+    "heading": "Cung cấp chất lượng cao",
+    "headingSmart": "Thông minh",
+    "headingSystems": "Hệ thống",
+    "description": "Kết nối các tác nhân AI với các công cụ kinh doanh của bạn để tự động hóa các tác vụ lặp đi lặp lại, loại bỏ công việc bận rộn",
+    "services": [
+      {
+        "title": "Phát triển AI",
+        "description": "Phân tích mục tiêu là một cuộc kiểm tra các mục tiêu tiềm năng để xác định tầm quan trọng quân sự."
+      },
+      {
+        "title": "Hệ thống đại diện",
+        "description": "Tối ưu hóa nội dung là quá trình đảm bảo nội dung được viết theo cách có thể tiếp cận."
+      },
+      {
+        "title": "Tự động hóa AI",
+        "description": "Tối ưu hóa nội dung là quá trình đảm bảo nội dung được viết theo cách có thể tiếp cận."
+      },
+      {
+        "title": "Tự động hóa web",
+        "description": "Phân tích mục tiêu là một cuộc kiểm tra các mục tiêu tiềm năng để xác định tầm quan trọng quân sự."
+      },
+      {
+        "title": "Ứng dụng LangGraph",
+        "description": "Tối ưu hóa nội dung là quá trình đảm bảo nội dung được viết theo cách có thể tiếp cận."
+      }
+    ]
+  },
+  "useCases": {
+    "heading": "Các trường hợp sử dụng",
+    "subtext": "Khám phá cách các giải pháp AI của chúng tôi có thể chuyển đổi hoạt động kinh doanh của bạn"
+  },
+  "workingProcess": {
+    "heading": "Công việc của chúng tôi",
+    "headingProcess": "Quy trình",
+    "description": "Kết nối các tác nhân AI với các công cụ kinh doanh của bạn để tự động hóa các tác vụ lặp đi lặp lại, loại bỏ công việc bận rộn và giải phóng nhóm của bạn để tập trung vào tăng trưởng.",
+    "steps": [
+      {
+        "title": "Thu thập yêu cầu",
+        "description": "Chúng tôi phân tích nhu cầu kinh doanh của bạn, xác định các điểm nghẽn và xác định các mục tiêu tự động hóa rõ ràng."
+      },
+      {
+        "title": "Lập kế hoạch và thiết kế",
+        "description": "Chúng tôi thiết kế một giải pháp AI phù hợp, thiết kế quy trình làm việc và chọn các công cụ tốt nhất cho ngăn xếp của bạn."
+      },
+      {
+        "title": "Triển khai / Phát triển",
+        "description": "Chúng tôi xây dựng và tích hợp các tác nhân AI tùy chỉnh để đảm bảo kết nối liền mạch với các hệ thống của bạn."
+      },
+      {
+        "title": "Kiểm tra & Tinh chỉnh",
+        "description": "Kiểm tra nghiêm ngặt đảm bảo tính chính xác và hiệu quả, với tinh chỉnh lặp đi lặp lại để có hiệu suất tối ưu."
+      },
+      {
+        "title": "Triển khai & Hỗ trợ",
+        "description": "Chúng tôi triển khai giải pháp và cung cấp hỗ trợ liên tục để đảm bảo giá trị và khả năng thích ứng bền vững."
+      }
+    ]
+  },
+  "faq": {
+    "heading": "Các câu hỏi thường gặp",
+    "questions": [
+      {
+        "question": "Làm cách nào tôi có thể kiểm tra tiến độ công việc?",
+        "answer": "Đừng lo lắng, chúng tôi sẽ lo cho bạn. Bạn sẽ có Backend, Frontend và máy chủ cơ sở dữ liệu MIỄN PHÍ. Khi hệ thống của chúng tôi cập nhật cho bạn những thay đổi, bạn có thể xem chúng ngay lập tức từ trang web."
+      },
+      {
+        "question": "Còn bảo trì thì sao?",
+        "answer": "Chúng tôi cung cấp các gói bảo trì liên tục để đảm bảo các tác nhân và tự động hóa AI của bạn tiếp tục hoạt động tối ưu khi doanh nghiệp của bạn phát triển."
+      },
+      {
+        "question": "Bạn có bằng chứng về khái niệm không?",
+        "answer": "Có, chúng tôi có thể phát triển Proof of Concept (POC) để chứng minh giá trị và tính khả thi của giải pháp được đề xuất trước khi triển khai quy mô đầy đủ."
+      },
+      {
+        "question": "IntellAgent an toàn đến mức nào?",
+        "answer": "Bảo mật là ưu tiên hàng đầu của chúng tôi. Chúng tôi sử dụng mã hóa theo tiêu chuẩn ngành và tuân theo các phương pháp hay nhất để đảm bảo dữ liệu của bạn và dữ liệu của khách hàng bạn luôn an toàn và bảo mật."
+      },
+      {
+        "question": "Điều gì khiến bạn khác biệt so với các nhà cung cấp khác?",
+        "answer": "Chúng tôi tập trung vào việc tạo ra các hệ thống tích hợp đầy đủ, phù hợp hơn là chỉ các chatbot độc lập. Các giải pháp của chúng tôi được thiết kế để tự động hóa toàn bộ quy trình làm việc, không chỉ trả lời các câu hỏi."
+      },
+      {
+        "question": "Công ty của tôi cần phải có trụ sở ở đâu?",
+        "answer": "Chúng tôi hoạt động trên toàn cầu! Vì các giải pháp của chúng tôi dựa trên đám mây, chúng tôi có thể làm việc với các công ty đặt tại bất kỳ đâu trên thế giới."
+      }
+    ]
+  },
+  "footer": {
+    "slogan": "Hãy thư giãn, chúng tôi hiểu bạn và chúng tôi đã lo liệu cho bạn.",
+    "tryServices": "thử các dịch vụ của chúng tôi",
+    "newsletter": "Đăng ký nhận bản tin của chúng tôi",
+    "stayInTouch": "GIỮ LIÊN LẠC",
+    "links": {
+      "home": "Trang chủ",
+      "services": "Dịch vụ",
+      "news": "Tin tức & Sự kiện",
+      "aboutUs": "Về chúng tôi",
+      "contact": "Liên hệ"
+    },
+    "copyright": "©2025 INTELLAGENT"
+  }
+}
