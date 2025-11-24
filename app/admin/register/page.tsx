@@ -3,6 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/contexts/auth-context";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -92,102 +102,106 @@ export default function AdminRegisterPage() {
         Register New Admin
       </h1>
 
-      <div className="bg-white rounded-lg shadow p-8 max-w-md">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {error && (
-            <div
-              className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              {error}
+      <Card className="max-w-md">
+        <CardHeader>
+          <CardTitle style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Create Account
+          </CardTitle>
+          <CardDescription style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Enter the details for the new admin user.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div
+                className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded text-sm"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div
+                className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded text-sm"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                {success}
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="name"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                Name (Optional)
+              </Label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Admin Name"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              />
             </div>
-          )}
 
-          {success && (
-            <div
-              className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              {success}
+            <div className="space-y-2">
+              <Label
+                htmlFor="email"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                Email *
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="admin@example.com"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              />
             </div>
-          )}
 
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-2"
+            <div className="space-y-2">
+              <Label
+                htmlFor="password"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                Password *
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                placeholder="••••••••"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              />
+              <p
+                className="text-xs text-muted-foreground"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                Minimum 6 characters
+              </p>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              Name (Optional)
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#111] focus:border-transparent"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-              placeholder="Admin Name"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              Email *
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#111] focus:border-transparent"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-              placeholder="admin@example.com"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-2"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              Password *
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#111] focus:border-transparent"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-              placeholder="••••••••"
-            />
-            <p
-              className="text-xs text-gray-500 mt-1"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              Minimum 6 characters
-            </p>
-          </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-[#111] text-white py-2.5 px-4 font-semibold rounded hover:bg-[#333] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            {isLoading ? "Registering..." : "Register Admin"}
-          </button>
-        </form>
-      </div>
+              {isLoading ? "Registering..." : "Register Admin"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

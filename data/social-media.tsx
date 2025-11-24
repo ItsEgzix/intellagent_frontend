@@ -20,18 +20,7 @@ export const socialItems: SocialItem[] = [
 
 // Social media loop items for footer
 export const socialLoopItems: LoopItem[] = [
-  {
-    node: (
-      <span
-        className="text-[64px] md:text-[80px] lg:text-[100px] font-normal text-white/50 hover:text-white transition-colors"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
-      >
-        Linkedin
-      </span>
-    ),
-    title: "Linkedin",
-    href: "#",
-  },
+
   {
     node: (
       <span

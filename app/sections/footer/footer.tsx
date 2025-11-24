@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useI18n } from "../../contexts/i18n-context";
-import { useState, useEffect } from "react";
-import { getAvailableTimeSlots as getAvailableTimeSlotsAPI } from "@/util/api/agents";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import {
+  getAvailableTimeSlots as getAvailableTimeSlotsAPI,
+  getActiveAgents,
+} from "@/util/api/agents";
 import { getAllMeetings, createMeeting } from "@/util/api/meetings";
 import { subscribeToNewsletter } from "@/util/api/emails";
 import { formatDate } from "@/util/helpers/date";
@@ -12,9 +15,24 @@ import { timezones } from "@/util/helpers/timezones";
 import AgentSelector from "./components/agent-selector";
 import MeetingCalendar from "./components/meeting-calendar";
 import SocialLoop from "./components/social-loop";
+import {
+  MeetingAutomationData,
+  useAutomation,
+} from "../../contexts/automation-context";
+import { showToast } from "@/components/ui/toast";
+
+const wait = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 export default function Footer() {
   const { t } = useI18n();
+  const {
+    automationData,
+    clearAutomation,
+    registerAutomationTarget,
+    automationStage,
+    automationError,
+  } = useAutomation();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{
@@ -38,6 +56,37 @@ export default function Footer() {
   const [bookedDates, setBookedDates] = useState<string[]>([]);
   const [isLoadingMeetings, setIsLoadingMeetings] = useState(false);
   const [isLoadingAvailability, setIsLoadingAvailability] = useState(false);
+  const footerSectionRef = useRef<HTMLElement | null>(null);
+  const meetingFormRef = useRef<HTMLFormElement | null>(null);
+  const timeSlotsRef = useRef<string[]>([]);
+  const selectedAgentRef = useRef<any | null>(null);
+  const selectedDateRef = useRef<Date | null>(null);
+  const selectedTimeRef = useRef<string>("");
+  const agentsCacheRef = useRef<any[] | null>(null);
+  const automationClearTimeoutRef = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
+  const automationStatusMessage = useMemo(() => {
+    switch (automationStage) {
+      case "pending":
+        return "Give me a moment while I get the booking assistant ready.";
+      case "scrolling":
+        return "Guiding you to the booking assistant…";
+      case "filling":
+        return "Auto-filling the form with the details you provided.";
+      case "submitting":
+        return "Submitting the booking request on your behalf.";
+      case "completed":
+        return "All set! Review the confirmation below.";
+      case "error":
+        return (
+          automationError ||
+          "The automation was interrupted. You can finish the form manually."
+        );
+      default:
+        return null;
+    }
+  }, [automationStage, automationError]);
 
   // Fetch scheduled meetings for the selected agent
   useEffect(() => {
@@ -98,20 +147,217 @@ export default function Footer() {
     }
   };
 
-  const handleDateSelect = (date: Date) => {
+  const handleDateSelect = useCallback((date: Date) => {
     setSelectedDate(date);
     setSelectedTime("");
-  };
+  }, []);
 
-  const handleAgentSelect = (agent: any | null) => {
+  const handleAgentSelect = useCallback((agent: any | null) => {
     setSelectedAgent(agent);
     // Reset steps if changing agent
     setSelectedDate(null);
     setSelectedTime("");
     setTimeSlots([]);
-  };
+  }, []);
 
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
+
+  useEffect(() => {
+    timeSlotsRef.current = timeSlots;
+  }, [timeSlots]);
+
+  useEffect(() => {
+    selectedAgentRef.current = selectedAgent;
+  }, [selectedAgent]);
+
+  useEffect(() => {
+    selectedDateRef.current = selectedDate;
+  }, [selectedDate]);
+
+  useEffect(() => {
+    selectedTimeRef.current = selectedTime;
+  }, [selectedTime]);
+
+  // Automation helpers will register via context below
+  const automationScrollIntoView = useCallback(async () => {
+    console.log("DEBUG: automationScrollIntoView called");
+    if (!footerSectionRef.current) {
+      footerSectionRef.current = document.getElementById("contact");
+    }
+    console.log("DEBUG: footerSectionRef.current:", footerSectionRef.current);
+    footerSectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    // Human-like delay: wait for scroll to complete, then pause
+    await wait(1500);
+  }, []);
+
+  const ensureAgentSelected = useCallback(
+    async (data: MeetingAutomationData) => {
+      console.log("DEBUG: ensureAgentSelected called with", data);
+      if (!data.agentId && !data.agentName) return;
+
+      if (!agentsCacheRef.current) {
+        agentsCacheRef.current = await getActiveAgents();
+      }
+
+      const agent =
+        agentsCacheRef.current?.find(
+          (a) =>
+            a.id === data.agentId ||
+            a.name?.toLowerCase() === data.agentName?.toLowerCase()
+        ) ?? null;
+
+      console.log("DEBUG: Found agent:", agent);
+      if (agent) {
+        handleAgentSelect(agent);
+        // Human-like delay: pause after selecting agent
+        await wait(1200);
+      }
+    },
+    [handleAgentSelect]
+  );
+
+  const ensureTimeSlotSelected = useCallback(async (targetTime?: string) => {
+    if (!targetTime) return;
+    const normalized = targetTime.slice(0, 5);
+
+    // Human-like delay: wait for time slots to load (with patience)
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const slots = timeSlotsRef.current;
+      if (slots.length > 0) {
+        // Human-like delay: pause before selecting time slot
+        await wait(600);
+        const match =
+          slots.find((slot) => slot.includes(normalized)) ?? slots[0];
+        setSelectedTime(match);
+        return;
+      }
+      await wait(400);
+    }
+  }, []);
+
+  // Typing animation helper - types text character by character
+  const typeText = useCallback(
+    async (
+      text: string,
+      setter: (value: string) => void,
+      speed: number = 50
+    ) => {
+      for (let i = 0; i <= text.length; i++) {
+        setter(text.slice(0, i));
+        await wait(speed + Math.random() * 30); // Randomize speed slightly for human-like feel
+      }
+    },
+    []
+  );
+
+  const fillMeetingForm = useCallback(
+    async (data: MeetingAutomationData) => {
+      console.log("DEBUG: fillMeetingForm called with", data);
+      await ensureAgentSelected(data);
+
+      // Human-like delay: pause before filling timezone
+      await wait(800);
+      if (data.timezone) {
+        setTimezone(data.timezone);
+        await wait(600);
+      }
+
+      // Human-like delay: pause before selecting date
+      await wait(800);
+      if (data.date) {
+        const parsedDate = new Date(`${data.date}T12:00:00`);
+        if (!isNaN(parsedDate.getTime())) {
+          handleDateSelect(parsedDate);
+          // Wait for calendar to update and time slots to load
+          await wait(1500);
+        }
+      }
+
+      // Human-like delay: pause before selecting time
+      await wait(800);
+      await ensureTimeSlotSelected(data.time);
+      await wait(1000);
+
+      // Human-like delay: pause before filling contact info with typing animation
+      await wait(600);
+      if (data.customerName) {
+        await typeText(data.customerName, setCustomerName, 60);
+        await wait(500);
+      }
+      if (data.email) {
+        await typeText(data.email, setMeetingEmail, 50);
+        await wait(500);
+      }
+      if (data.phone) {
+        await typeText(data.phone, setPhone, 60);
+        await wait(500);
+      }
+
+      // Final pause to let user see everything is filled
+      await wait(1000);
+    },
+    [ensureAgentSelected, ensureTimeSlotSelected, handleDateSelect, typeText]
+  );
+
+  const submitAutomationForm = useCallback(async () => {
+    const formElement = meetingFormRef.current;
+    if (!formElement) return;
+
+    if (typeof formElement.requestSubmit === "function") {
+      formElement.requestSubmit();
+    } else {
+      formElement.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      );
+    }
+    await wait(400);
+  }, []);
+
+  useEffect(() => {
+    // Register automation target with auto-submit enabled
+    const unregister = registerAutomationTarget({
+      scrollIntoView: automationScrollIntoView,
+      fillForm: fillMeetingForm,
+      submitForm: submitAutomationForm,
+    });
+
+    return () => {
+      unregister();
+    };
+  }, [
+    registerAutomationTarget,
+    automationScrollIntoView,
+    fillMeetingForm,
+    submitAutomationForm,
+  ]);
+
+  useEffect(() => {
+    if (automationStage === "error" && automationError) {
+      showToast(`Automation failed: ${automationError}`, "error", 5000);
+    }
+
+    if (automationStage !== "completed") {
+      if (automationClearTimeoutRef.current) {
+        clearTimeout(automationClearTimeoutRef.current);
+        automationClearTimeoutRef.current = null;
+      }
+      return;
+    }
+
+    automationClearTimeoutRef.current = setTimeout(() => {
+      clearAutomation();
+    }, 4000);
+
+    return () => {
+      if (automationClearTimeoutRef.current) {
+        clearTimeout(automationClearTimeoutRef.current);
+        automationClearTimeoutRef.current = null;
+      }
+    };
+  }, [automationStage, automationError, clearAutomation]);
 
   // Fetch available time slots from backend (already filtered for existing meetings)
   useEffect(() => {
@@ -193,10 +439,19 @@ export default function Footer() {
         agentId: selectedAgent?.id,
       });
 
+      const successMessage = `Meeting scheduled successfully with ${
+        selectedAgent?.name || "agent"
+      } on ${formatDate(
+        selectedDate
+      )} at ${selectedTime}! Check your email for confirmation.`;
+
       setMeetingMessage({
         type: "success",
         text: "Meeting scheduled successfully! Check your email for confirmation.",
       });
+
+      // Show toast notification
+      showToast(successMessage, "success", 6000);
 
       // Add the new meeting date to booked dates for this agent
       const newDate = formatDate(selectedDate);
@@ -228,7 +483,13 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-[#111] text-white pt-20 pb-10 overflow-hidden">
+    <footer
+      id="contact"
+      ref={(node) => {
+        footerSectionRef.current = node;
+      }}
+      className="w-full bg-[#111] text-white pt-20 pb-10 overflow-hidden"
+    >
       <div className="container mx-auto px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 mb-20">
           {/* Left Column */}
@@ -251,6 +512,7 @@ export default function Footer() {
             <button
               className="border border-white/50 rounded-full px-8 py-3 text-lg hover:bg-white hover:text-black transition-colors mb-8"
               style={{ fontFamily: "var(--font-dm-sans)" }}
+              suppressHydrationWarning
             >
               {t.footer.tryServices}
             </button>
@@ -269,12 +531,14 @@ export default function Footer() {
                   disabled={isLoading}
                   className="flex-1 bg-transparent border border-white/50 rounded-full px-6 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white transition-colors"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
+                  suppressHydrationWarning
                 />
                 <button
                   type="submit"
                   disabled={isLoading}
                   className="border border-white/50 rounded-full px-6 py-3 text-white hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
+                  suppressHydrationWarning
                 >
                   {isLoading ? "..." : "Subscribe"}
                 </button>
@@ -336,7 +600,28 @@ export default function Footer() {
                 </div>
               </div>
 
-              <form onSubmit={handleMeetingSubmit} className="space-y-4">
+              <form
+                ref={meetingFormRef}
+                onSubmit={handleMeetingSubmit}
+                className="space-y-4"
+              >
+                {automationStatusMessage && (
+                  <div className="rounded-md border border-dashed border-[#111]/20 bg-gray-50 p-3 text-sm text-gray-700">
+                    <p style={{ fontFamily: "var(--font-dm-sans)" }}>
+                      {automationStatusMessage}
+                    </p>
+                    {automationStage === "completed" && automationData && (
+                      <p
+                        className="text-xs text-gray-500 mt-1"
+                        style={{ fontFamily: "var(--font-dm-sans)" }}
+                      >
+                        Filled for {automationData.customerName}. You can make
+                        any changes before confirming.
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 {/* Step 1: Agent Selection (Handled above) */}
                 {!selectedAgent && (
                   <div className="text-center text-gray-500 text-sm py-4">

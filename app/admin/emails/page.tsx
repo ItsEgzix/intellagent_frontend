@@ -97,6 +97,12 @@ export default function EmailsPage() {
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     style={{ fontFamily: "var(--font-dm-sans)" }}
                   >
+                    Avatar
+                  </th>
+                  <th
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    style={{ fontFamily: "var(--font-dm-sans)" }}
+                  >
                     Email
                   </th>
                   <th
@@ -116,6 +122,16 @@ export default function EmailsPage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {emails.map((email) => (
                   <tr key={email.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <span
+                          className="text-gray-400 text-xs font-medium"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {email.email.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div
                         className="text-sm font-medium text-[#111]"

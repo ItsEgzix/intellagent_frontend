@@ -4,7 +4,24 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/app/contexts/auth-context";
 import { getAllUsers, User } from "@/util/api/users";
 import { timezones } from "@/util/helpers/timezones";
-import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -15,11 +32,14 @@ export default function AdminsPage() {
   const [error, setError] = useState("");
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [agentFilter, setAgentFilter] = useState<string>("all"); // "all", "agents", "non-agents"
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     timezone: "Asia/Kuala_Lumpur",
     avatar: "",
+    isActive: true,
+    isAgent: false,
   });
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -49,6 +69,8 @@ export default function AdminsPage() {
       email: user.email,
       timezone: user.timezone || "Asia/Kuala_Lumpur",
       avatar: user.avatar || "",
+      isActive: user.isActive,
+      isAgent: user.isAgent,
     });
     setAvatarFile(null);
     setAvatarPreview(null);
@@ -64,6 +86,8 @@ export default function AdminsPage() {
       email: "",
       timezone: "Asia/Kuala_Lumpur",
       avatar: "",
+      isActive: true,
+      isAgent: false,
     });
     setAvatarFile(null);
     setAvatarPreview(null);
@@ -90,6 +114,7 @@ export default function AdminsPage() {
     setError("");
 
     try {
+      // Update user basic info
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
       formDataToSend.append("email", formData.email);
@@ -99,17 +124,38 @@ export default function AdminsPage() {
         formDataToSend.append("avatar", avatarFile);
       }
 
-      const response = await fetch(`${API_URL}/auth/users/${editingUser.id}`, {
+      const userResponse = await fetch(
+        `${API_URL}/auth/users/${editingUser.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formDataToSend,
+        }
+      );
+
+      if (!userResponse.ok) {
+        const errorData = await userResponse.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to update user");
+      }
+
+      // Update agent status (isActive and isAgent)
+      const agentResponse = await fetch(`${API_URL}/agents/${editingUser.id}`, {
         method: "PATCH",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: formDataToSend,
+        body: JSON.stringify({
+          isActive: formData.isActive,
+          isAgent: formData.isAgent,
+        }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Failed to update user");
+      if (!agentResponse.ok) {
+        const errorData = await agentResponse.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to update agent status");
       }
 
       await fetchUsers();
@@ -118,32 +164,6 @@ export default function AdminsPage() {
       setError(err instanceof Error ? err.message : "Failed to update user");
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleToggleIsAgent = async (user: User) => {
-    if (!token) return;
-
-    try {
-      const response = await fetch(`${API_URL}/agents/${user.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          isAgent: !user.isAgent,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Failed to update user");
-      }
-
-      await fetchUsers();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update user");
     }
   };
 
@@ -265,25 +285,108 @@ export default function AdminsPage() {
                   style={{ fontFamily: "var(--font-dm-sans)" }}
                 />
                 {(avatarPreview || editingUser.avatar) && (
-                  <div className="mt-2">
-                    <Image
-                      src={
-                        avatarPreview ||
-                        `${API_URL}${editingUser.avatar}` ||
-                        "/elements/sze.png"
-                      }
-                      alt="Avatar preview"
-                      width={80}
-                      height={80}
-                      className="rounded-full object-cover"
-                      unoptimized={
-                        avatarPreview
-                          ? false
-                          : editingUser.avatar?.includes("localhost") || false
-                      }
-                    />
+                  <div className="mt-2 flex items-center gap-3">
+                    <div className="relative w-20 h-20">
+                      <img
+                        src={
+                          avatarPreview
+                            ? avatarPreview
+                            : editingUser.avatar?.startsWith("http") ||
+                              editingUser.avatar?.startsWith("data:")
+                            ? editingUser.avatar
+                            : `${API_URL}${
+                                editingUser.avatar?.startsWith("/") ? "" : "/"
+                              }${editingUser.avatar}`
+                        }
+                        alt="Avatar preview"
+                        className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = "none";
+                          const parent = target.parentElement;
+                          if (parent) {
+                            const fallback = parent.querySelector(
+                              ".avatar-preview-fallback"
+                            ) as HTMLElement;
+                            if (fallback) {
+                              fallback.style.display = "flex";
+                            }
+                          }
+                        }}
+                      />
+                      <div
+                        className={`avatar-preview-fallback w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center border-2 border-gray-300 absolute top-0 left-0 ${
+                          !avatarPreview && !editingUser.avatar ? "" : "hidden"
+                        }`}
+                      >
+                        <span
+                          className="text-gray-400 text-xl font-medium"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {(editingUser.name || editingUser.email || "U")
+                            .charAt(0)
+                            .toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 )}
+              </div>
+
+              <div className="flex items-center gap-4 md:col-span-2">
+                <div className="flex items-center gap-3">
+                  <label
+                    htmlFor="isActive"
+                    className="text-sm font-medium text-gray-700 cursor-pointer"
+                    style={{ fontFamily: "var(--font-dm-sans)" }}
+                  >
+                    Active
+                  </label>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={formData.isActive}
+                    onClick={() =>
+                      setFormData({ ...formData, isActive: !formData.isActive })
+                    }
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#111] focus:ring-offset-2 ${
+                      formData.isActive ? "bg-[#111]" : "bg-gray-300"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.isActive ? "translate-x-6" : "translate-x-1"
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <label
+                    htmlFor="isAgent"
+                    className="text-sm font-medium text-gray-700 cursor-pointer"
+                    style={{ fontFamily: "var(--font-dm-sans)" }}
+                  >
+                    Is Agent
+                  </label>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={formData.isAgent}
+                    onClick={() =>
+                      setFormData({ ...formData, isAgent: !formData.isAgent })
+                    }
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#111] focus:ring-offset-2 ${
+                      formData.isAgent ? "bg-[#111]" : "bg-gray-300"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.isAgent ? "translate-x-6" : "translate-x-1"
+                      }`}
+                    />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -320,6 +423,40 @@ export default function AdminsPage() {
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3
+              className="text-lg font-semibold text-[#111]"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              Admins & Agents (
+              {agentFilter === "all"
+                ? users.length
+                : agentFilter === "agents"
+                ? users.filter((u) => u.isAgent).length
+                : users.filter((u) => !u.isAgent).length}
+              )
+            </h3>
+            <div className="flex items-center gap-2">
+              <Label
+                htmlFor="agentFilter"
+                className="text-sm"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                Filter:
+              </Label>
+              <select
+                id="agentFilter"
+                value={agentFilter}
+                onChange={(e) => setAgentFilter(e.target.value)}
+                className="flex h-9 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                <option value="all">All Users</option>
+                <option value="agents">Agents Only</option>
+                <option value="non-agents">Non-Agents</option>
+              </select>
+            </div>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
@@ -375,99 +512,131 @@ export default function AdminsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <Image
-                          src={
-                            user.avatar
-                              ? `${API_URL}${user.avatar}`
-                              : "/elements/sze.png"
-                          }
-                          alt={user.name || "User"}
-                          width={40}
-                          height={40}
-                          className="w-full h-full object-cover"
-                          unoptimized={
-                            user.avatar?.includes("localhost") || false
-                          }
-                          loading="lazy"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div
-                        className="text-sm font-medium text-[#111]"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
-                      >
-                        {user.name || "N/A"}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div
-                        className="text-sm text-gray-900"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
-                      >
-                        {user.email}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div
-                        className="text-sm text-gray-900"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
-                      >
-                        {user.timezone || "N/A"}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 py-1 text-xs rounded ${
-                          user.role === "superadmin"
-                            ? "bg-purple-100 text-purple-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
-                      >
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => handleToggleIsAgent(user)}
-                        className={`px-3 py-1 text-xs rounded transition-colors ${
-                          user.isAgent
-                            ? "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                            : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                        }`}
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
-                      >
-                        {user.isAgent ? "Yes" : "No"}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 py-1 text-xs rounded ${
-                          user.isActive
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
-                      >
-                        {user.isActive ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => handleEdit(user)}
-                        className="text-[#111] hover:text-[#333]"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {users
+                  .filter((user) => {
+                    if (agentFilter === "all") return true;
+                    if (agentFilter === "agents") return user.isAgent;
+                    if (agentFilter === "non-agents") return !user.isAgent;
+                    return true;
+                  })
+                  .map((user) => (
+                    <tr key={user.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="relative w-10 h-10">
+                          {user.avatar ? (
+                            <img
+                              src={
+                                user.avatar.startsWith("http") ||
+                                user.avatar.startsWith("data:")
+                                  ? user.avatar
+                                  : `${API_URL}${
+                                      user.avatar.startsWith("/") ? "" : "/"
+                                    }${user.avatar}`
+                              }
+                              alt={user.name || "User"}
+                              className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = "none";
+                                const parent = target.parentElement;
+                                if (parent) {
+                                  const fallback = parent.querySelector(
+                                    ".avatar-fallback"
+                                  ) as HTMLElement;
+                                  if (fallback) {
+                                    fallback.style.display = "flex";
+                                  }
+                                }
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            className={`avatar-fallback w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center ${
+                              user.avatar ? "hidden" : "flex"
+                            }`}
+                          >
+                            <span
+                              className="text-gray-400 text-xs font-medium"
+                              style={{ fontFamily: "var(--font-dm-sans)" }}
+                            >
+                              {(user.name || user.email || "U")
+                                .charAt(0)
+                                .toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div
+                          className="text-sm font-medium text-[#111]"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {user.name || "N/A"}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div
+                          className="text-sm text-gray-900"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {user.email}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div
+                          className="text-sm text-gray-900"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {user.timezone || "N/A"}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-1 text-xs rounded ${
+                            user.role === "superadmin"
+                              ? "bg-purple-100 text-purple-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-1 text-xs rounded ${
+                            user.isAgent
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {user.isAgent ? "Yes" : "No"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-1 text-xs rounded ${
+                            user.isActive
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {user.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button
+                          onClick={() => handleEdit(user)}
+                          className="text-[#111] hover:text-[#333]"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

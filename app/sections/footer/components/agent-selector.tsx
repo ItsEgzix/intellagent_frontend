@@ -97,7 +97,9 @@ export default function AgentSelector({
               width={80}
               height={80}
               className="w-full h-full object-cover object-center"
-              unoptimized={selectedAgent.avatar?.includes("localhost") || false}
+              quality={100}
+              unoptimized={true}
+
             />
           </div>
           {agents.length > 1 && (

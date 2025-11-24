@@ -1,0 +1,27 @@
+[
+  {
+    "code": "en",
+    "name": "English",
+    "nameEn": "English"
+  },
+  {
+    "code": "zh",
+    "name": "中文",
+    "nameEn": "Chinese"
+  },
+  {
+    "code": "ms",
+    "name": "Bahasa Melayu",
+    "nameEn": "Malay"
+  },
+  {
+    "code": "fr",
+    "name": "Français",
+    "nameEn": "Français"
+  },
+  {
+    "code": "ja",
+    "name": "日本語",
+    "nameEn": "日本語"
+  }
+]

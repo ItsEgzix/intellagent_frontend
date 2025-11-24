@@ -2,10 +2,9 @@
  * Constants used across the application
  */
 
-import { type Locale } from "@/lib/i18n";
+import { getLanguageName } from "@/lib/language-registry";
 
-export const languageNames: Record<Locale, string> = {
-  en: "English",
-  zh: "中文",
-  ms: "Bahasa Melayu",
-};
+// Helper function to get language name (with fallback)
+export function getLanguageDisplayName(code: string): string {
+  return getLanguageName(code, true);
+}

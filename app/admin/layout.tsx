@@ -45,8 +45,12 @@ export default function AdminLayout({
           { href: "/admin/register", label: "Register Admin" },
         ]
       : []),
+    { href: "/admin/customers", label: "Customers" },
     { href: "/admin/meetings", label: "Meetings" },
-    { href: "/admin/emails", label: "Newsletter Subscribers" },
+    ...(user?.role === "superadmin"
+      ? [{ href: "/admin/emails", label: "Newsletter Subscribers" }]
+      : []),
+    { href: "/admin/profile", label: "Profile" },
   ];
 
   return (

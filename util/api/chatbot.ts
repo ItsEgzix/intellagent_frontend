@@ -59,3 +59,10 @@ export const clearSession = async (sessionId: string): Promise<void> => {
     throw new Error("Failed to clear session");
   }
 };
+
+// Set locale (language preference)
+export const setLocale = async (locale: string): Promise<void> => {
+  // This is handled client-side via localStorage and context
+  // No API call needed, but keeping for consistency
+  localStorage.setItem("locale", locale);
+};

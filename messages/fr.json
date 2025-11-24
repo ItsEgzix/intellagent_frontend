@@ -1,0 +1,144 @@
+{
+  "header": {
+    "aboutUs": "À propos de nous",
+    "services": "Nos services",
+    "useCases": "Cas d'utilisation",
+    "process": "Processus",
+    "contactUs": "Contactez-nous"
+  },
+  "sidebar": {
+    "watchIntro": "REGARDER L'INTRODUCTION",
+    "scrollDown": "DÉFILER VERS LE BAS"
+  },
+  "hero": {
+    "letUs": "Laissez-nous",
+    "buildYour": "Construire votre",
+    "customAIAgent": "Agent IA personnalisé",
+    "subtitle": "Transformez votre travail répétitif en systèmes intelligents et autonomes"
+  },
+  "aboutUs": {
+    "heading": "À propos de nous",
+    "description": "Nous sommes une équipe d'experts en IA dédiée à la transformation des entreprises grâce à l'automatisation intelligente. Notre mission est d'aider les entreprises à éliminer les tâches répétitives et à libérer leur plein potentiel grâce à des solutions d'IA de pointe."
+  },
+  "aiVoiceAgent": {
+    "heading": "Agent vocal IA, pour les ventes et le support client",
+    "description": "Une plateforme pour créer, relier et personnaliser des agents de vente et de marketing capables de faire des appels entrants et sortants. L'agent peut être lié aux données de l'entreprise et évaluer le niveau de satisfaction du client.",
+    "featureText": "Toujours disponible pour stimuler vos ventes",
+    "buttonAlt": "Prenons un Chá茶t"
+  },
+  "postGeneration": {
+    "heading": "Automatisez votre génération de publications",
+    "description": "Une plateforme où vous téléchargez les données de vos clients pour le contexte, laissez les agents rechercher votre marché et vos concurrents et créez vos publications hebdomadaires.",
+    "featureText": "Génération de contenu plus rapide pour votre entreprise",
+    "buttonAlt": "Prenons un Chá茶t"
+  },
+  "webAutomation": {
+    "heading": "Automatisation Web avec",
+    "headingChromium": "chromium",
+    "description": "Une solution d'automatisation Web qui exécute un navigateur dans le backend pour automatiser toute tâche à partir de n'importe quelle plateforme, par exemple, WhatsApp, le web scraping, etc...",
+    "featureText": "Toujours disponible pour stimuler vos ventes",
+    "buttonAlt": "Prenons un Chá茶t"
+  },
+  "services": {
+    "heading": "Fournir une qualité élevée",
+    "headingSmart": "Intelligent",
+    "headingSystems": "Systèmes",
+    "description": "Connectez les agents d'IA à vos outils d'entreprise pour automatiser les tâches répétitives, éliminer les corvées",
+    "services": [
+      {
+        "title": "Développement de l'IA",
+        "description": "L'analyse des cibles est un examen des cibles potentielles pour déterminer l'importance militaire."
+      },
+      {
+        "title": "Systèmes agentiques",
+        "description": "L'optimisation du contenu est le processus qui consiste à s'assurer que le contenu est rédigé de manière à pouvoir être diffusé."
+      },
+      {
+        "title": "Automatisation de l'IA",
+        "description": "L'optimisation du contenu est le processus qui consiste à s'assurer que le contenu est rédigé de manière à pouvoir être diffusé."
+      },
+      {
+        "title": "Automatisation Web",
+        "description": "L'analyse des cibles est un examen des cibles potentielles pour déterminer l'importance militaire."
+      },
+      {
+        "title": "Applications LangGraph",
+        "description": "L'optimisation du contenu est le processus qui consiste à s'assurer que le contenu est rédigé de manière à pouvoir être diffusé."
+      }
+    ]
+  },
+  "useCases": {
+    "heading": "Cas d'utilisation",
+    "subtext": "Découvrez comment nos solutions d'IA peuvent transformer vos opérations commerciales"
+  },
+  "workingProcess": {
+    "heading": "Notre travail",
+    "headingProcess": "Processus",
+    "description": "Connectez les agents d'IA à vos outils d'entreprise pour automatiser les tâches répétitives, éliminer les corvées et permettre à votre équipe de se concentrer sur la croissance.",
+    "steps": [
+      {
+        "title": "Collecte des exigences",
+        "description": "Nous analysons vos besoins commerciaux, identifions les goulots d'étranglement et définissons des objectifs d'automatisation clairs."
+      },
+      {
+        "title": "Planification et conception",
+        "description": "Nous concevons une solution d'IA sur mesure, en concevant des flux de travail et en sélectionnant les meilleurs outils pour votre pile."
+      },
+      {
+        "title": "Mise en œuvre / Développement",
+        "description": "Nous construisons et intégrons des agents d'IA personnalisés pour assurer une connectivité transparente avec vos systèmes."
+      },
+      {
+        "title": "Tests et affinement",
+        "description": "Des tests rigoureux garantissent la précision et l'efficacité, avec un affinement itératif pour une performance optimale."
+      },
+      {
+        "title": "Déploiement et assistance",
+        "description": "Nous déployons la solution et fournissons une assistance continue pour assurer une valeur et une adaptabilité durables."
+      }
+    ]
+  },
+  "faq": {
+    "heading": "Foire aux questions",
+    "questions": [
+      {
+        "question": "Comment puis-je vérifier l'avancement des travaux ?",
+        "answer": "Ne vous inquiétez pas, nous avons tout prévu. Vous disposerez d'un hébergement GRATUIT pour le backend, le frontend et la base de données. Lorsque notre système vous informera des modifications, vous pourrez les consulter immédiatement sur le site web."
+      },
+      {
+        "question": "Qu'en est-il de la maintenance ?",
+        "answer": "Nous proposons des forfaits de maintenance continue pour garantir que vos agents d'IA et vos automatisations continuent de fonctionner de manière optimale à mesure que votre entreprise évolue."
+      },
+      {
+        "question": "Avez-vous une preuve de concept ?",
+        "answer": "Oui, nous pouvons développer une preuve de concept (POC) pour démontrer la valeur et la faisabilité de la solution proposée avant sa mise en œuvre à grande échelle."
+      },
+      {
+        "question": "Quel est le niveau de sécurité d'IntellAgent ?",
+        "answer": "La sécurité est notre priorité absolue. Nous utilisons un cryptage standard et suivons les meilleures pratiques pour garantir que vos données et celles de vos clients restent sûres et confidentielles."
+      },
+      {
+        "question": "Qu'est-ce qui vous différencie des autres fournisseurs ?",
+        "answer": "Nous nous concentrons sur la création de systèmes sur mesure et entièrement intégrés plutôt que de simples chatbots autonomes. Nos solutions sont conçues pour automatiser des flux de travail entiers, et pas seulement pour répondre à des questions."
+      },
+      {
+        "question": "Où mon entreprise doit-elle être basée ?",
+        "answer": "Nous opérons dans le monde entier ! Étant donné que nos solutions sont basées sur le cloud, nous pouvons travailler avec des entreprises situées partout dans le monde."
+      }
+    ]
+  },
+  "footer": {
+    "slogan": "Détendez-vous, nous vous comprenons et nous sommes là pour vous.",
+    "tryServices": "essayez nos services",
+    "newsletter": "Abonnez-vous à notre newsletter",
+    "stayInTouch": "RESTEZ EN CONTACT",
+    "links": {
+      "home": "Accueil",
+      "services": "Services",
+      "news": "Actualités et événements",
+      "aboutUs": "À propos de nous",
+      "contact": "Contact"
+    },
+    "copyright": "©2025 INTELLAGENT"
+  }
+}

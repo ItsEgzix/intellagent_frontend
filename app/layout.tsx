@@ -3,7 +3,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { I18nProvider } from "./contexts/i18n-context";
 import { AuthProvider } from "./contexts/auth-context";
-import ChatbotButton from "./components/chatbot/chatbot-button";
+import { AutomationProvider } from "./contexts/automation-context";
+import { FloatingAIEntry } from "@/components/floating-ai-entry";
+import { ToastProvider } from "./contexts/toast-context";
 
 const dmSans = localFont({
   src: [
@@ -141,8 +143,12 @@ export default function RootLayout({
       >
         <I18nProvider>
           <AuthProvider>
-            {children}
-            <ChatbotButton />
+            <AutomationProvider>
+              <ToastProvider>
+                {children}
+                <FloatingAIEntry />
+              </ToastProvider>
+            </AutomationProvider>
           </AuthProvider>
         </I18nProvider>
       </body>

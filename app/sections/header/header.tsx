@@ -4,9 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useI18n } from "../../contexts/i18n-context";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { locales, type Locale } from "@/lib/i18n";
 import StaggeredMenu from "@/components/StaggeredMenu";
-import { languageNames } from "@/util/helpers/constants";
+import {
+  LANGUAGE_REGISTRY_UPDATED_EVENT,
+  getAvailableLocales,
+  getLanguageName,
+  refreshLanguageRegistry,
+} from "@/lib/language-registry";
+import type { LanguageInfo } from "@/lib/language-registry";
 import { socialItems } from "@/data/social-media";
 
 export default function Header() {
@@ -15,6 +20,42 @@ export default function Header() {
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const desktopDropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Get locales dynamically from registry - refresh periodically to catch new languages
+  const [locales, setLocales] = useState(() => getAvailableLocales());
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function syncLocales(force: boolean = false) {
+      const languages = await refreshLanguageRegistry(force);
+      if (!isMounted) return;
+      setLocales(languages.map((language) => language.code));
+    }
+
+    const handleRegistryUpdate = (event: Event) => {
+      const detail = (event as CustomEvent<LanguageInfo[]>).detail;
+      if (!detail || !isMounted) {
+        return;
+      }
+      setLocales(detail.map((language) => language.code));
+    };
+
+    // Initial fetch to ensure we pick up languages added after build
+    syncLocales(true);
+    window.addEventListener(
+      LANGUAGE_REGISTRY_UPDATED_EVENT,
+      handleRegistryUpdate as EventListener
+    );
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener(
+        LANGUAGE_REGISTRY_UPDATED_EVENT,
+        handleRegistryUpdate as EventListener
+      );
+    };
+  }, []);
 
   const menuItems = useMemo(
     () => [
@@ -184,7 +225,7 @@ export default function Header() {
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span>{languageNames[lang]}</span>
+                      <span>{getLanguageName(lang)}</span>
                       <span className="text-xs text-gray-500">
                         {lang.toUpperCase()}
                       </span>
@@ -250,7 +291,7 @@ export default function Header() {
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs">{languageNames[lang]}</span>
+                        <span className="text-xs">{getLanguageName(lang)}</span>
                         <span className="text-xs text-gray-500">
                           {lang.toUpperCase()}
                         </span>
