@@ -179,3 +179,13 @@
   font-size: 0.9rem;
   gap: 0.4rem;
 }
+
+/* Yellow square adjustments for 1535px - 1700px screens */
+@media (min-width: 1535px) and (max-width: 1700px) {
+  .yellow-square-custom {
+    left: calc(60% - 350px) !important;
+    right: auto !important;
+    width: 400px !important;
+    height: 425px !important;
+  }
+}
