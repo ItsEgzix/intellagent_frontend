@@ -430,17 +430,60 @@ function MorphPanel() {
             /```(?:json)?\s*MEETING_AUTOMATION:({[\s\S]*?})\s*```/
           );
 
-          // Pattern 2: Plain text MEETING_AUTOMATION:{...}
-          const plainMatch = responseMessage.match(
-            /MEETING_AUTOMATION:({[\s\S]*?})(?:\n\n|```|$)/
-          );
-
           if (markdownMatch && markdownMatch[1]) {
             jsonString = markdownMatch[1];
             console.log("DEBUG: Found in markdown code block");
-          } else if (plainMatch && plainMatch[1]) {
-            jsonString = plainMatch[1];
-            console.log("DEBUG: Found in plain text");
+          } else {
+            // Pattern 2: Plain text MEETING_AUTOMATION:{...}
+            // Use brace counting to properly extract the JSON object
+            const automationIndex = responseMessage.indexOf(
+              "MEETING_AUTOMATION:"
+            );
+            if (automationIndex !== -1) {
+              const afterMarker = responseMessage.substring(
+                automationIndex + "MEETING_AUTOMATION:".length
+              );
+
+              // Find the opening brace
+              const braceStartIndex = afterMarker.indexOf("{");
+              if (braceStartIndex !== -1) {
+                // Count braces to find the matching closing brace
+                let braceCount = 0;
+                let jsonEndIndex = -1;
+
+                for (let i = braceStartIndex; i < afterMarker.length; i++) {
+                  if (afterMarker[i] === "{") braceCount++;
+                  if (afterMarker[i] === "}") {
+                    braceCount--;
+                    if (braceCount === 0) {
+                      jsonEndIndex = i + 1;
+                      break;
+                    }
+                  }
+                }
+
+                if (jsonEndIndex > 0) {
+                  jsonString = afterMarker.substring(
+                    braceStartIndex,
+                    jsonEndIndex
+                  );
+                  console.log(
+                    "DEBUG: Found in plain text using brace matching"
+                  );
+                }
+              }
+            }
+
+            // Fallback to regex if brace matching didn't work
+            if (!jsonString) {
+              const plainMatch = responseMessage.match(
+                /MEETING_AUTOMATION:\s*({[\s\S]*?})\s*(?:\n\n|```|$|\.|,|;|\s*$)/m
+              );
+              if (plainMatch && plainMatch[1]) {
+                jsonString = plainMatch[1];
+                console.log("DEBUG: Found in plain text using regex fallback");
+              }
+            }
           }
 
           if (jsonString) {
