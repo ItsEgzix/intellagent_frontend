@@ -47,23 +47,23 @@
     "services": [
       {
         "title": "AI Development",
-        "description": "Target analysis is an examination of potential targets to determine military importance."
+        "description": "Build custom AI agents tailored to your business needs. From voice agents for sales and customer support to intelligent chatbots that understand your domain, we create AI solutions that integrate seamlessly with your existing systems."
       },
       {
         "title": "Agentic Systems",
-        "description": "Content optimization is the process of making sure content is written in a way that it can reach."
+        "description": "Design and deploy multi-agent systems where AI agents collaborate to solve complex business problems. Our agentic architectures enable intelligent workflows that can reason, plan, and execute tasks autonomously across your organization."
       },
       {
         "title": "AI Automation",
-        "description": "Content optimization is the process of making sure content is written in a way that it can reach."
+        "description": "Transform repetitive business processes into intelligent, self-running systems. Our AI automation solutions eliminate manual work, reduce errors, and free your team to focus on high-value strategic initiatives."
       },
       {
         "title": "Web Automation",
-        "description": "Target analysis is an examination of potential targets to determine military importance."
+        "description": "Automate web-based tasks with our Chromium-powered solutions. From data scraping and form filling to social media management and multi-platform workflows, we handle complex browser automation that works reliably at scale."
       },
       {
         "title": "LangGraph Apps",
-        "description": "Content optimization is the process of making sure content is written in a way that it can reach."
+        "description": "Build sophisticated AI applications using LangGraph's state machine architecture. Create complex agent workflows with decision trees, loops, and conditional logic that can handle intricate business processes and multi-step operations."
       }
     ]
   },
