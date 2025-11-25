@@ -90,7 +90,12 @@ export default function AgentSelector({
             <Image
               src={
                 selectedAgent.avatar
-                  ? `${API_URL}${selectedAgent.avatar}`
+                  ? selectedAgent.avatar.startsWith("http") ||
+                    selectedAgent.avatar.startsWith("https")
+                    ? selectedAgent.avatar
+                    : `${API_URL}${
+                        selectedAgent.avatar.startsWith("/") ? "" : "/"
+                      }${selectedAgent.avatar}`
                   : "/elements/sze.png"
               }
               alt={selectedAgent.name || "Agent"}
@@ -99,7 +104,6 @@ export default function AgentSelector({
               className="w-full h-full object-cover object-center"
               quality={100}
               unoptimized={true}
-
             />
           </div>
           {agents.length > 1 && (
@@ -128,14 +132,19 @@ export default function AgentSelector({
                     <Image
                       src={
                         agent.avatar
-                          ? `${API_URL}${agent.avatar}`
+                          ? agent.avatar.startsWith("http") ||
+                            agent.avatar.startsWith("https")
+                            ? agent.avatar
+                            : `${API_URL}${
+                                agent.avatar.startsWith("/") ? "" : "/"
+                              }${agent.avatar}`
                           : "/elements/sze.png"
                       }
                       alt={agent.name || "Agent"}
                       width={64}
                       height={64}
                       className="w-full h-full object-cover object-center"
-                      unoptimized={agent.avatar?.includes("localhost") || false}
+                      unoptimized={agent.avatar?.startsWith("http") || false}
                       loading="lazy"
                     />
                   </div>

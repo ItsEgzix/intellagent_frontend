@@ -48,7 +48,18 @@ export const getAllMeetings = async (token?: string): Promise<Meeting[]> => {
     headers,
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch meetings");
+    const errorText = await response.text().catch(() => "");
+    let errorMessage = "Failed to fetch meetings";
+    try {
+      const errorData = JSON.parse(errorText);
+      errorMessage = errorData.message || errorMessage;
+    } catch {
+      // If parsing fails, use status text or default message
+      errorMessage = response.statusText || errorMessage;
+    }
+    const error = new Error(errorMessage);
+    (error as any).status = response.status;
+    throw error;
   }
   return response.json();
 };

@@ -16,6 +16,7 @@ import {
 } from "@/components/conversation";
 import { Button } from "@/components/ui/button";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { TextShimmer } from "@/components/ui/text-shimmer";
 import { cn } from "@/lib/utils";
 import type { ChatMessage } from "@/util/api/chatbot";
 import { sendChatMessage } from "@/util/api/chatbot";
@@ -859,8 +860,15 @@ const InputForm = React.forwardRef<HTMLTextAreaElement>((_, ref) => {
                         <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-full border border-foreground/10 bg-background/50 p-1 shadow-sm">
                           <ColorOrb dimension="22px" />
                         </div>
-                        <div className="markdown-response max-w-[85%] text-[17px] leading-relaxed text-foreground/70 italic">
-                          Thinking...
+                        <div className="markdown-response max-w-[85%] text-[17px] leading-relaxed">
+                          <TextShimmer
+                            as="span"
+                            className="italic text-foreground/70"
+                            duration={2}
+                            spread={2}
+                          >
+                            Thinking...
+                          </TextShimmer>
                         </div>
                       </div>
                     )}

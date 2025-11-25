@@ -94,6 +94,8 @@ export default function Footer() {
       if (selectedAgent?.id) {
         setIsLoadingMeetings(true);
         try {
+          // Note: getAllMeetings requires authentication, so this will fail for public users
+          // This is expected behavior - booked dates will only show for authenticated admins
           const allMeetings = await getAllMeetings();
           // Filter meetings for the selected agent
           const agentMeetings = allMeetings.filter(
@@ -106,10 +108,16 @@ export default function Footer() {
             .filter((date: string | null | undefined) => date != null);
           // Remove duplicates
           setBookedDates([...new Set(dates)]);
-        } catch (error) {
-          console.error("Failed to fetch meetings:", error);
-          // If fetch fails (network error, CORS, etc.), clear booked dates
-          setBookedDates([]);
+        } catch (error: any) {
+          // Silently handle auth errors (401, 403) - this is expected for public users
+          if (error?.status === 401 || error?.status === 403) {
+            // Public users can't see booked dates, which is fine
+            setBookedDates([]);
+          } else {
+            // Log other errors but don't break the UI
+            console.error("Failed to fetch meetings:", error);
+            setBookedDates([]);
+          }
         } finally {
           setIsLoadingMeetings(false);
         }

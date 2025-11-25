@@ -7,12 +7,15 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import StaggeredMenu from "@/components/StaggeredMenu";
 import { Locale, fetchLanguageOptions, type LanguageOption } from "@/lib/i18n";
 import { socialItems } from "@/data/social-media";
+import { PdfViewerModal } from "@/components/ui/pdf-viewer-modal";
+import { BookOpen } from "lucide-react";
 
 export default function Header() {
   const { t, locale, setLocale } = useI18n();
   const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const [isRefreshingLanguages, setIsRefreshingLanguages] = useState(false);
+  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const desktopDropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
   // Start with only English, will be updated from database
@@ -174,6 +177,16 @@ export default function Header() {
             </Link>
           </nav>
 
+          {/* Booklet Button */}
+          <button
+            onClick={() => setIsPdfModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            aria-label="Open booklet"
+          >
+            <BookOpen className="h-5 w-5" />
+            <span className="text-sm hidden sm:inline">Booklet</span>
+          </button>
+
           {/* Globe Icon - Language Dropdown */}
           <div className="relative" ref={desktopDropdownRef}>
             <button
@@ -283,6 +296,15 @@ export default function Header() {
           </Link>
 
           <div className="flex items-center gap-4">
+            {/* Booklet Button */}
+            <button
+              onClick={() => setIsPdfModalOpen(true)}
+              className="flex items-center justify-center p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              aria-label="Open booklet"
+            >
+              <BookOpen className="h-5 w-5" />
+            </button>
+
             {/* Language Dropdown */}
             <div className="relative" ref={mobileDropdownRef}>
               <button
@@ -375,6 +397,15 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* PDF Viewer Modal */}
+      <PdfViewerModal
+        isOpen={isPdfModalOpen}
+        onClose={() => setIsPdfModalOpen(false)}
+        pdfUrl="/booklet/IntellAgent booklet.pdf"
+        title="IntellAgent Booklet"
+        downloadFileName="IntellAgent-booklet.pdf"
+      />
     </header>
   );
 }
