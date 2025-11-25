@@ -5,57 +5,37 @@ import Link from "next/link";
 import { useI18n } from "../../contexts/i18n-context";
 import { useState, useRef, useEffect, useMemo } from "react";
 import StaggeredMenu from "@/components/StaggeredMenu";
-import {
-  LANGUAGE_REGISTRY_UPDATED_EVENT,
-  getAvailableLocales,
-  getLanguageName,
-  refreshLanguageRegistry,
-} from "@/lib/language-registry";
-import type { LanguageInfo } from "@/lib/language-registry";
+import { Locale, fetchLanguageOptions, type LanguageOption } from "@/lib/i18n";
 import { socialItems } from "@/data/social-media";
 
 export default function Header() {
   const { t, locale, setLocale } = useI18n();
   const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+  const [isRefreshingLanguages, setIsRefreshingLanguages] = useState(false);
   const desktopDropdownRef = useRef<HTMLDivElement>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
+  // Start with only English, will be updated from database
+  const [languageOptions, setLanguageOptions] = useState<LanguageOption[]>([
+    {
+      code: "en",
+      nativeName: "English",
+      englishName: "English",
+    },
+  ]);
 
-  // Get locales dynamically from registry - refresh periodically to catch new languages
-  const [locales, setLocales] = useState(() => getAvailableLocales());
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function syncLocales(force: boolean = false) {
-      const languages = await refreshLanguageRegistry(force);
-      if (!isMounted) return;
-      setLocales(languages.map((language) => language.code));
+  const handleRefreshLanguages = async () => {
+    setIsRefreshingLanguages(true);
+    try {
+      const options = await fetchLanguageOptions(true);
+      console.log("Languages refreshed from API:", options);
+      setLanguageOptions(options);
+    } catch (error) {
+      console.error("Failed to refresh languages:", error);
+    } finally {
+      setIsRefreshingLanguages(false);
     }
-
-    const handleRegistryUpdate = (event: Event) => {
-      const detail = (event as CustomEvent<LanguageInfo[]>).detail;
-      if (!detail || !isMounted) {
-        return;
-      }
-      setLocales(detail.map((language) => language.code));
-    };
-
-    // Initial fetch to ensure we pick up languages added after build
-    syncLocales(true);
-    window.addEventListener(
-      LANGUAGE_REGISTRY_UPDATED_EVENT,
-      handleRegistryUpdate as EventListener
-    );
-
-    return () => {
-      isMounted = false;
-      window.removeEventListener(
-        LANGUAGE_REGISTRY_UPDATED_EVENT,
-        handleRegistryUpdate as EventListener
-      );
-    };
-  }, []);
+  };
 
   const menuItems = useMemo(
     () => [
@@ -98,6 +78,28 @@ export default function Header() {
       t.header.contactUs,
     ]
   );
+
+  // Fetch languages from API when dropdown is opened
+  // Preload languages on mount so they're ready when dropdown opens
+  useEffect(() => {
+    fetchLanguageOptions(true)
+      .then((options) => {
+        console.log("Languages preloaded from API:", options);
+        setLanguageOptions(options);
+      })
+      .catch((error) => {
+        console.error("Failed to preload languages:", error);
+      });
+  }, []);
+
+  const handleDropdownToggle = (isOpen: boolean, isDesktop: boolean) => {
+    // Languages are already preloaded, just toggle the dropdown
+    if (isDesktop) {
+      setIsDesktopDropdownOpen(isOpen);
+    } else {
+      setIsMobileDropdownOpen(isOpen);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -175,7 +177,7 @@ export default function Header() {
           {/* Globe Icon - Language Dropdown */}
           <div className="relative" ref={desktopDropdownRef}>
             <button
-              onClick={() => setIsDesktopDropdownOpen(!isDesktopDropdownOpen)}
+              onClick={() => handleDropdownToggle(!isDesktopDropdownOpen, true)}
               className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
               aria-label="Select language"
               suppressHydrationWarning
@@ -211,23 +213,50 @@ export default function Header() {
             {/* Dropdown Menu */}
             {isDesktopDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-black rounded-lg shadow-lg border border-gray-700 overflow-hidden z-50">
-                {locales.map((lang) => (
+                {/* Refresh Button */}
+                <button
+                  onClick={handleRefreshLanguages}
+                  disabled={isRefreshingLanguages}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors border-b border-gray-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <svg
+                    className={`w-4 h-4 ${
+                      isRefreshingLanguages ? "animate-spin" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                  <span>
+                    {isRefreshingLanguages
+                      ? "Refreshing..."
+                      : "Refresh Languages"}
+                  </span>
+                </button>
+                {languageOptions.map((language) => (
                   <button
-                    key={lang}
+                    key={language.code}
                     onClick={() => {
-                      setLocale(lang);
+                      setLocale(language.code as Locale);
                       setIsDesktopDropdownOpen(false);
                     }}
                     className={`w-full text-left px-4 py-3 text-sm transition-colors ${
-                      locale === lang
+                      locale === language.code
                         ? "bg-gray-800 text-white"
                         : "text-gray-300 hover:bg-gray-800 hover:text-white"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span>{getLanguageName(lang)}</span>
+                      <span>{language.nativeName}</span>
                       <span className="text-xs text-gray-500">
-                        {lang.toUpperCase()}
+                        {language.code.toUpperCase()}
                       </span>
                     </div>
                   </button>
@@ -257,7 +286,9 @@ export default function Header() {
             {/* Language Dropdown */}
             <div className="relative" ref={mobileDropdownRef}>
               <button
-                onClick={() => setIsMobileDropdownOpen(!isMobileDropdownOpen)}
+                onClick={() =>
+                  handleDropdownToggle(!isMobileDropdownOpen, false)
+                }
                 className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
                 aria-label="Select language"
                 suppressHydrationWarning
@@ -277,23 +308,48 @@ export default function Header() {
               {/* Dropdown Menu */}
               {isMobileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-40 bg-black rounded-lg shadow-lg border border-gray-700 overflow-hidden z-50">
-                  {locales.map((lang) => (
+                  {/* Refresh Button */}
+                  <button
+                    onClick={handleRefreshLanguages}
+                    disabled={isRefreshingLanguages}
+                    className="w-full text-left px-3 py-2 text-xs text-gray-300 hover:bg-gray-800 hover:text-white transition-colors border-b border-gray-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <svg
+                      className={`w-3 h-3 ${
+                        isRefreshingLanguages ? "animate-spin" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
+                    </svg>
+                    <span>
+                      {isRefreshingLanguages ? "Refreshing..." : "Refresh"}
+                    </span>
+                  </button>
+                  {languageOptions.map((language) => (
                     <button
-                      key={lang}
+                      key={language.code}
                       onClick={() => {
-                        setLocale(lang);
+                        setLocale(language.code as Locale);
                         setIsMobileDropdownOpen(false);
                       }}
                       className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-                        locale === lang
+                        locale === language.code
                           ? "bg-gray-800 text-white"
                           : "text-gray-300 hover:bg-gray-800 hover:text-white"
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs">{getLanguageName(lang)}</span>
+                        <span className="text-xs">{language.nativeName}</span>
                         <span className="text-xs text-gray-500">
-                          {lang.toUpperCase()}
+                          {language.code.toUpperCase()}
                         </span>
                       </div>
                     </button>

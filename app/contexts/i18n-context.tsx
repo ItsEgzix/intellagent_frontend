@@ -1,14 +1,20 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { Locale, getTranslations, loadLanguage } from "@/lib/i18n";
-import type { messages } from "@/lib/i18n";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import {
+  DEFAULT_LOCALE,
+  Locale,
+  Messages,
+  getTranslations,
   isValidLocale,
-  refreshLanguageRegistry,
-} from "@/lib/language-registry";
-
-type Messages = typeof messages.en;
+  loadLanguage,
+} from "@/lib/i18n";
 
 const I18nContext = createContext<{
   locale: Locale;
@@ -17,86 +23,68 @@ const I18nContext = createContext<{
 } | null>(null);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  // Initialize with default locale and ensure translations are available immediately
-  const [locale, setLocaleState] = useState<Locale>("en");
-  const [isLoading, setIsLoading] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  // Ensure default translations are available immediately for SSR
-  const [t] = useState(() => getTranslations("en"));
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function bootstrapLocale() {
-      // Always refresh the registry so newly generated languages become available
-      await refreshLanguageRegistry(true);
-      if (!isMounted) return;
-
-      const savedLocale = localStorage.getItem("locale") as Locale | null;
-      if (savedLocale && isValidLocale(savedLocale)) {
-        await loadLanguage(savedLocale);
-        if (isMounted) {
-          setLocaleState(savedLocale);
-        }
-      }
-    }
-
-    bootstrapLocale();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const setLocale = async (newLocale: Locale) => {
-    // Prevent page reload by using state update instead of navigation
-    if (newLocale === locale) return;
-
-    setIsLoading(true);
-    try {
-      let localeExists = isValidLocale(newLocale);
-      if (!localeExists) {
-        await refreshLanguageRegistry(true);
-        localeExists = isValidLocale(newLocale);
-      }
-
-      // In development, always force reload to get fresh translations
-      const isDev =
-        typeof window !== "undefined"
-          ? window.location.hostname === "localhost" ||
-            window.location.hostname === "127.0.0.1"
-          : process.env.NODE_ENV === "development";
-      // Load the language file if it's not already loaded
-      const loadedMessages = await loadLanguage(
-        newLocale,
-        isDev || !localeExists
-      );
-      if (loadedMessages) {
-        setLocaleState(newLocale);
-        localStorage.setItem("locale", newLocale);
-        // Force a re-render by updating refresh key
-        setRefreshKey((prev) => prev + 1);
-      } else {
-        console.warn(
-          `Language ${newLocale} not available, keeping current locale`
-        );
-      }
-    } catch (error) {
-      console.error(`Failed to load language ${newLocale}:`, error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Re-compute translations when locale or refreshKey changes
-  const currentT = React.useMemo(
-    () => getTranslations(locale),
-    [locale, refreshKey]
+  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+  // Initialize with English fallback to prevent undefined errors
+  const [translations, setTranslations] = useState<Messages>(() =>
+    getTranslations(DEFAULT_LOCALE)
   );
 
-  // Use current translations, fallback to initial if not available
-  const translations = currentT || t;
+  const changeLocale = useCallback(
+    async (
+      newLocale: Locale,
+      options: { force?: boolean; persist?: boolean } = {}
+    ) => {
+      const normalized = isValidLocale(newLocale) ? newLocale : DEFAULT_LOCALE;
+
+      if (!options.force && normalized === locale) {
+        return;
+      }
+
+      const loaded = await loadLanguage(normalized, options.force);
+      if (loaded) {
+        setTranslations(loaded);
+        setLocaleState(normalized);
+        if (options.persist ?? true) {
+          localStorage.setItem("locale", normalized);
+        }
+        return;
+      }
+
+      if (normalized !== DEFAULT_LOCALE) {
+        const fallback = await loadLanguage(DEFAULT_LOCALE, options.force);
+        if (fallback) {
+          setTranslations(fallback);
+          setLocaleState(DEFAULT_LOCALE);
+          if (options.persist ?? true) {
+            localStorage.setItem("locale", DEFAULT_LOCALE);
+          }
+        }
+      }
+    },
+    [locale]
+  );
+
+  useEffect(() => {
+    // Load default locale first, then check for saved locale
+    const loadInitialLocale = async () => {
+      const savedLocale = localStorage.getItem("locale");
+      const localeToLoad =
+        savedLocale && isValidLocale(savedLocale)
+          ? savedLocale
+          : DEFAULT_LOCALE;
+
+      await changeLocale(localeToLoad, { force: false });
+    };
+
+    void loadInitialLocale();
+  }, [changeLocale]);
+
+  const setLocale = useCallback(
+    (newLocale: Locale) => {
+      void changeLocale(newLocale);
+    },
+    [changeLocale]
+  );
 
   return (
     <I18nContext.Provider value={{ locale, setLocale, t: translations }}>
