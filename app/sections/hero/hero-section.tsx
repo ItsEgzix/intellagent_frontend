@@ -41,14 +41,15 @@ export default function HeroSection() {
       <section className="relative pt-16 md:pt-20 lg:pt-0">
         <div className="mx-auto max-w-[1920px] relative w-full px-4 md:px-6 lg:px-0">
           {/* Hero text section */}
-          <div className="relative w-full h-[300px] md:h-[400px] lg:h-[640px] xl:h-[780px] 2xl:h-[962px]">
-            <div className="absolute flex flex-col left-4 md:left-6 lg:left-8 xl:left-[100px] 2xl:left-[calc(50%-630px)] top-[110px] md:top-[180px] lg:top-[320px] xl:top-[380px] 2xl:top-[420px] w-full max-w-[95vw] md:max-w-[90vw] lg:max-w-[750px] xl:max-w-[850px] 2xl:max-w-[1000px] z-20 pr-4 md:pr-6 lg:pr-8 hero-text-section">
+          <div className="relative w-full h-[300px] md:h-[400px] lg:h-[720px] xl:h-[880px] 2xl:h-[962px]">
+            <div className="absolute flex flex-col left-4 md:left-6 lg:left-8 xl:left-[100px] 2xl:left-[calc(50%-630px)] top-[110px] md:top-[180px] lg:top-[320px] xl:top-[400px] 2xl:top-[420px] w-full max-w-[95vw] md:max-w-[90vw] lg:max-w-[750px] xl:max-w-[850px] 2xl:max-w-[1000px] z-20 pr-4 md:pr-6 lg:pr-8 hero-text-section">
               {/* Top line */}
               <div className="flex flex-wrap items-center gap-2 md:gap-3 lg:gap-4 mb-2 md:mb-3">
                 <span
                   className="text-black"
                   style={{
-                    fontFamily: "var(--font-beatrice-display)",
+                    fontFamily:
+                      "var(--font-beatrice-display), 'Microsoft YaHei', 'PingFang SC', sans-serif",
                     fontSize: "clamp(28px, 5vw, 80px)",
                     fontWeight: 400,
                   }}
@@ -72,7 +73,8 @@ export default function HeroSection() {
                 <span
                   className="text-black"
                   style={{
-                    fontFamily: "var(--font-beatrice-display)",
+                    fontFamily:
+                      "var(--font-beatrice-display), 'Microsoft YaHei', 'PingFang SC', sans-serif",
                     fontSize: "clamp(28px, 5vw, 80px)",
                     fontWeight: 400,
                   }}
@@ -86,7 +88,8 @@ export default function HeroSection() {
                 <span
                   className="text-black"
                   style={{
-                    fontFamily: "var(--font-beatrice-display)",
+                    fontFamily:
+                      "var(--font-beatrice-display), 'Microsoft YaHei', 'PingFang SC', sans-serif",
                     fontSize: "clamp(32px, 5.5vw, 80px)",
                     fontWeight: 600,
                   }}
@@ -138,7 +141,7 @@ export default function HeroSection() {
           </div>
 
           {/* Yellow box - desktop */}
-          <div className="hidden lg:block absolute right-0 xl:right-0 2xl:right-[calc(40%-1000px)] top-[100px] lg:top-[200px] xl:top-[250px] 2xl:top-[300px] w-[300px] lg:w-[400px] xl:w-[500px] 2xl:w-[620px] h-[320px] lg:h-[425px] xl:h-[530px] 2xl:h-[662px]">
+          <div className="hidden lg:block absolute right-0 xl:right-0 2xl:right-[calc(40%-1000px)] top-[100px] lg:top-[200px] xl:top-[280px] 2xl:top-[300px] w-[300px] lg:w-[400px] xl:w-[500px] 2xl:w-[620px] h-[320px] lg:h-[425px] xl:h-[530px] 2xl:h-[662px]">
             <Image
               src="/elements/Yellow squar 1920px.svg"
               alt="Yellow Square"
