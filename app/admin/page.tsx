@@ -11,6 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getAllCustomers } from "@/util/api/customers";
+import { calculateTimeDifference } from "@/util/helpers/time-difference";
+import { timezoneToLocation } from "@/util/helpers/timezone-location";
+import { MapPin } from "lucide-react";
+import Image from "next/image";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -175,79 +179,158 @@ export default function AdminDashboard() {
               No meetings scheduled yet.
             </p>
           ) : (
-            <div className="space-y-8">
-              {stats.recentMeetings.map((meeting) => (
-                <div key={meeting.id} className="flex items-center">
-                  {meeting.agent?.avatar ? (
-                    <img
-                      src={
-                        meeting.agent.avatar.startsWith("http") ||
-                        meeting.agent.avatar.startsWith("/") ||
-                        meeting.agent.avatar.startsWith("data:")
-                          ? meeting.agent.avatar
-                          : `${API_URL}${meeting.agent.avatar}`
-                      }
-                      alt={meeting.agent.name || "Agent"}
-                      className="h-9 w-9 rounded-full object-cover border border-border"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = "none";
-                        const parent = target.parentElement;
-                        if (parent) {
-                          const fallback = parent.querySelector(
-                            ".avatar-fallback"
-                          ) as HTMLElement;
-                          if (fallback) {
-                            fallback.style.display = "flex";
-                          }
-                        }
-                      }}
-                    />
-                  ) : null}
-                  <div
-                    className={`avatar-fallback h-9 w-9 rounded-full bg-muted flex items-center justify-center border border-border ${
-                      meeting.agent?.avatar ? "hidden" : "flex"
-                    }`}
-                  >
-                    <span
-                      className="text-muted-foreground text-xs font-medium"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
-                    >
-                      {(meeting.agent?.name || meeting.agent?.email || "A")
-                        .charAt(0)
-                        .toUpperCase()}
-                    </span>
-                  </div>
+            <div className="space-y-6">
+              {stats.recentMeetings.map((meeting) => {
+                // Calculate time difference if both timezones are available
+                const timeDiff =
+                  meeting.customerTimezone && meeting.agent?.timezone
+                    ? calculateTimeDifference(
+                        meeting.customerDate,
+                        meeting.customerTime,
+                        meeting.customerTimezone,
+                        meeting.agent.timezone
+                      )
+                    : null;
 
-                  <div className="ml-4 space-y-1">
-                    <p
-                      className="text-sm font-medium leading-none"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
-                    >
-                      {meeting.customer?.name ||
-                        meeting.customer?.email ||
-                        "N/A"}
-                    </p>
-                    <p
-                      className="text-sm text-muted-foreground"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
-                    >
-                      {meeting.customer?.email}
-                    </p>
+                // Get client initial
+                const clientInitial = (
+                  meeting.customer?.name ||
+                  meeting.customer?.email ||
+                  "C"
+                )
+                  .charAt(0)
+                  .toUpperCase();
+
+                return (
+                  <div
+                    key={meeting.id}
+                    className="flex items-start gap-4 p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors"
+                  >
+                    {/* Client Avatar */}
+                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary/20 shrink-0">
+                      <span
+                        className="text-primary font-semibold text-lg"
+                        style={{ fontFamily: "var(--font-dm-sans)" }}
+                      >
+                        {clientInitial}
+                      </span>
+                    </div>
+
+                    {/* Agent Avatar */}
+                    <div className="relative h-12 w-12 rounded-full border-2 border-border shrink-0">
+                      {meeting.agent?.avatar ? (
+                        <img
+                          src={
+                            meeting.agent.avatar.startsWith("http") ||
+                            meeting.agent.avatar.startsWith("/") ||
+                            meeting.agent.avatar.startsWith("data:")
+                              ? meeting.agent.avatar
+                              : `${API_URL}${meeting.agent.avatar}`
+                          }
+                          alt={meeting.agent.name || "Agent"}
+                          className="h-full w-full rounded-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = "none";
+                            const parent = target.parentElement;
+                            if (parent) {
+                              const fallback = parent.querySelector(
+                                ".agent-avatar-fallback"
+                              ) as HTMLElement;
+                              if (fallback) {
+                                fallback.style.display = "flex";
+                              }
+                            }
+                          }}
+                        />
+                      ) : null}
+                      <div
+                        className={`agent-avatar-fallback h-full w-full rounded-full bg-muted flex items-center justify-center ${
+                          meeting.agent?.avatar ? "hidden" : "flex"
+                        }`}
+                      >
+                        <span
+                          className="text-muted-foreground text-xs font-medium"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {(meeting.agent?.name || meeting.agent?.email || "A")
+                            .charAt(0)
+                            .toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Details */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-4 mb-2">
+                        <div className="flex-1 min-w-0">
+                          {/* Agent Name */}
+                          <p
+                            className="text-sm font-semibold leading-tight mb-1"
+                            style={{ fontFamily: "var(--font-dm-sans)" }}
+                          >
+                            {meeting.agent?.name || "Agent N/A"}
+                          </p>
+
+                          {/* Agent Location */}
+                          {meeting.agent?.timezone && (
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground leading-tight mb-1">
+                              <MapPin className="h-3 w-3" />
+                              <span
+                                style={{ fontFamily: "var(--font-dm-sans)" }}
+                              >
+                                {timezoneToLocation(meeting.agent.timezone)}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Client Name */}
+                          <p
+                            className="text-sm text-muted-foreground leading-tight mt-2 mb-1"
+                            style={{ fontFamily: "var(--font-dm-sans)" }}
+                          >
+                            Client: {meeting.customer?.name || "N/A"}
+                          </p>
+
+                          {/* Client Location */}
+                          {meeting.customerTimezone && (
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground leading-tight">
+                              <MapPin className="h-3 w-3" />
+                              <span
+                                style={{ fontFamily: "var(--font-dm-sans)" }}
+                              >
+                                {timezoneToLocation(meeting.customerTimezone)}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p
+                            className="text-sm font-medium"
+                            style={{ fontFamily: "var(--font-dm-sans)" }}
+                          >
+                            {meeting.customerDate}
+                          </p>
+                          <p
+                            className="text-xs text-muted-foreground"
+                            style={{ fontFamily: "var(--font-dm-sans)" }}
+                          >
+                            {meeting.customerTime}
+                          </p>
+                        </div>
+                      </div>
+                      {timeDiff && (
+                        <p
+                          className="text-xs text-muted-foreground mt-1"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          Time difference: {timeDiff}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className="ml-auto font-medium text-sm text-right">
-                    <p style={{ fontFamily: "var(--font-dm-sans)" }}>
-                      {meeting.customerDate}
-                    </p>
-                    <p
-                      className="text-muted-foreground text-xs"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
-                    >
-                      {meeting.customerTime}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </CardContent>

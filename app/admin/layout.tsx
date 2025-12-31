@@ -43,6 +43,7 @@ export default function AdminLayout({
       ? [
           { href: "/admin/admins", label: "Admins" },
           { href: "/admin/register", label: "Register Admin" },
+          { href: "/admin/settings", label: "Settings" },
         ]
       : []),
     { href: "/admin/customers", label: "Customers" },

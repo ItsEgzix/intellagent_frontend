@@ -7,9 +7,11 @@ export default function AboutUs() {
   return (
     <div
       id="about"
-      className="relative bg-black w-screen overflow-hidden mt-0 py-[60px] z-10"
+      className="relative bg-black w-screen overflow-hidden mt-0 pb-[60px] z-10"
       style={{
-        minHeight: "380px",
+        height: "348px",
+        marginTop: "0",
+        paddingTop: "0",
         backgroundImage: "url('/elements/Grid.svg')",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
@@ -20,17 +22,41 @@ export default function AboutUs() {
       <div className="absolute left-0 top-0 hidden md:flex">
         {/* Left column */}
         <div className="flex flex-col">
-          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-white"></div>
-          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-black"></div>
-          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-white"></div>
-          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-black"></div>
+          <div
+            className="bg-white"
+            style={{ width: "87px", height: "87px" }}
+          ></div>
+          <div
+            className="bg-black"
+            style={{ width: "87px", height: "87px" }}
+          ></div>
+          <div
+            className="bg-white"
+            style={{ width: "87px", height: "87px" }}
+          ></div>
+          <div
+            className="bg-black"
+            style={{ width: "87px", height: "87px" }}
+          ></div>
         </div>
         {/* Right column */}
         <div className="flex flex-col">
-          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-black"></div>
-          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-white"></div>
-          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-black"></div>
-          <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-white"></div>
+          <div
+            className="bg-black"
+            style={{ width: "87px", height: "87px" }}
+          ></div>
+          <div
+            className="bg-white"
+            style={{ width: "87px", height: "87px" }}
+          ></div>
+          <div
+            className="bg-black"
+            style={{ width: "87px", height: "87px" }}
+          ></div>
+          <div
+            className="bg-white"
+            style={{ width: "87px", height: "87px" }}
+          ></div>
         </div>
       </div>
 

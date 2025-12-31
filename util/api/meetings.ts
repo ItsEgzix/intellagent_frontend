@@ -26,6 +26,7 @@ export interface Meeting {
     name?: string;
     email: string;
     timezone?: string;
+    avatar?: string;
   };
   createdAt: string;
   updatedAt: string;

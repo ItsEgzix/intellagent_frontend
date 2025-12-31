@@ -12,12 +12,14 @@ import {
 interface MeetingCalendarProps {
   selectedDate: Date | null;
   bookedDates: string[];
+  datesWithNoSlots: string[];
   onDateSelect: (date: Date) => void;
 }
 
 export default function MeetingCalendar({
   selectedDate,
   bookedDates,
+  datesWithNoSlots,
   onDateSelect,
 }: MeetingCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState<Date | null>(null);
@@ -26,8 +28,19 @@ export default function MeetingCalendar({
   // Initialize currentMonth after mount to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
-    setCurrentMonth(new Date());
+    // Set to January 2026 if current year is not 2026
+    const now = new Date();
+    if (now.getFullYear() !== 2026) {
+      setCurrentMonth(new Date(2026, 0, 1)); // January 2026
+    } else {
+      setCurrentMonth(new Date());
+    }
   }, []);
+
+  const isDateWithNoSlots = (date: Date): boolean => {
+    const dateStr = formatDate(date);
+    return datesWithNoSlots.includes(dateStr);
+  };
 
   const handleDateSelect = (day: number) => {
     if (!currentMonth) return;
@@ -36,23 +49,41 @@ export default function MeetingCalendar({
       currentMonth.getMonth(),
       day
     );
-    if (isDateSelectable(date) && !isDateBooked(date, bookedDates)) {
+    if (
+      isDateSelectable(date) &&
+      !isDateBooked(date, bookedDates) &&
+      !isDateWithNoSlots(date)
+    ) {
       onDateSelect(date);
     }
   };
 
   const handlePrevMonth = () => {
     if (!currentMonth) return;
-    setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+    const newDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth() - 1,
+      1
     );
+    // Prevent navigating before 2026
+    if (newDate.getFullYear() < 2026) {
+      return;
+    }
+    setCurrentMonth(newDate);
   };
 
   const handleNextMonth = () => {
     if (!currentMonth) return;
-    setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+    const newDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth() + 1,
+      1
     );
+    // Prevent navigating after 2026
+    if (newDate.getFullYear() > 2026) {
+      return;
+    }
+    setCurrentMonth(newDate);
   };
 
   if (!currentMonth || !mounted) {
@@ -96,14 +127,14 @@ export default function MeetingCalendar({
     );
     const isSelectable = isDateSelectable(date);
     const isBooked = isDateBooked(date, bookedDates);
+    const hasNoSlots = isDateWithNoSlots(date);
     const isSelected =
       selectedDate && date.toDateString() === selectedDate.toDateString();
-    days.push({ day, date, isSelectable, isSelected, isBooked });
+    days.push({ day, date, isSelectable, isSelected, isBooked, hasNoSlots });
   }
 
-  // Generate years (current year ± 2 years)
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
+  // Generate years - only 2026
+  const years = [2026];
 
   return (
     <div className="bg-white p-4">
@@ -157,10 +188,12 @@ export default function MeetingCalendar({
           </select>
 
           <select
-            value={currentMonth?.getFullYear() ?? new Date().getFullYear()}
+            value={currentMonth?.getFullYear() ?? 2026}
             onChange={(e) => {
               if (!currentMonth) return;
               const newYear = parseInt(e.target.value);
+              // Only allow 2026
+              if (newYear !== 2026) return;
               setCurrentMonth(new Date(newYear, currentMonth.getMonth(), 1));
             }}
             className="px-2 py-1 text-sm font-semibold text-white bg-[#111] border border-[#111] focus:outline-none focus:border-white transition-colors"
@@ -217,7 +250,8 @@ export default function MeetingCalendar({
             return <div key={index} className="aspect-square" />;
           }
 
-          const { day, date, isSelectable, isSelected, isBooked } = dayData;
+          const { day, date, isSelectable, isSelected, isBooked, hasNoSlots } =
+            dayData;
           const dayOfWeek = date.getDay();
           const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
@@ -225,10 +259,10 @@ export default function MeetingCalendar({
             <button
               key={index}
               onClick={() => handleDateSelect(day)}
-              disabled={!isSelectable || isBooked}
+              disabled={!isSelectable || isBooked || hasNoSlots}
               type="button"
               className={`aspect-square text-sm font-medium transition-all duration-200 flex items-center justify-center ${
-                isSelected || isBooked
+                isSelected || isBooked || hasNoSlots
                   ? "rounded-full"
                   : isSelectable
                   ? "rounded-none hover:rounded-full"
@@ -236,6 +270,8 @@ export default function MeetingCalendar({
               } ${
                 isSelected
                   ? "bg-[#111] text-white"
+                  : hasNoSlots
+                  ? "bg-red-100 text-red-600 cursor-not-allowed rounded-full"
                   : isBooked
                   ? "bg-red-100 text-red-600 cursor-not-allowed rounded-full"
                   : isWeekend
@@ -246,7 +282,9 @@ export default function MeetingCalendar({
               }`}
               style={{ fontFamily: "var(--font-dm-sans)" }}
               title={
-                isBooked
+                hasNoSlots
+                  ? "No available time slots for this date"
+                  : isBooked
                   ? "Already booked"
                   : isWeekend
                   ? "Weekend - not available"

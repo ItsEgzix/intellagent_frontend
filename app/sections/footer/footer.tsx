@@ -54,6 +54,7 @@ export default function Footer() {
     text: string;
   } | null>(null);
   const [bookedDates, setBookedDates] = useState<string[]>([]);
+  const [datesWithNoSlots, setDatesWithNoSlots] = useState<string[]>([]);
   const [isLoadingMeetings, setIsLoadingMeetings] = useState(false);
   const [isLoadingAvailability, setIsLoadingAvailability] = useState(false);
   const footerSectionRef = useRef<HTMLElement | null>(null);
@@ -166,6 +167,7 @@ export default function Footer() {
     setSelectedDate(null);
     setSelectedTime("");
     setTimeSlots([]);
+    setDatesWithNoSlots([]); // Clear dates with no slots when agent changes
   }, []);
 
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
@@ -386,7 +388,23 @@ export default function Footer() {
 
           // Backend returns slots in customer's timezone, so no conversion needed
           // Sort slots by time
-          setTimeSlots(sortTimeSlots(availableSlots));
+          const sortedSlots = sortTimeSlots(availableSlots);
+          setTimeSlots(sortedSlots);
+
+          // Track dates with no available slots
+          if (selectedDate && sortedSlots.length === 0) {
+            const dateStr = formatDate(selectedDate);
+            setDatesWithNoSlots((prev) => {
+              if (!prev.includes(dateStr)) {
+                return [...prev, dateStr];
+              }
+              return prev;
+            });
+          } else if (selectedDate && sortedSlots.length > 0) {
+            // Remove from datesWithNoSlots if slots become available
+            const dateStr = formatDate(selectedDate);
+            setDatesWithNoSlots((prev) => prev.filter((d) => d !== dateStr));
+          }
         } catch (error) {
           console.error("Failed to fetch available slots:", error);
           // Fallback to frontend calculation
@@ -396,6 +414,21 @@ export default function Footer() {
             selectedDate
           );
           setTimeSlots(allSlots);
+
+          // Track dates with no available slots
+          if (selectedDate && allSlots.length === 0) {
+            const dateStr = formatDate(selectedDate);
+            setDatesWithNoSlots((prev) => {
+              if (!prev.includes(dateStr)) {
+                return [...prev, dateStr];
+              }
+              return prev;
+            });
+          } else if (selectedDate && allSlots.length > 0) {
+            // Remove from datesWithNoSlots if slots become available
+            const dateStr = formatDate(selectedDate);
+            setDatesWithNoSlots((prev) => prev.filter((d) => d !== dateStr));
+          }
         } finally {
           setIsLoadingAvailability(false);
         }
@@ -474,6 +507,7 @@ export default function Footer() {
       setSelectedAgent(null);
       setSelectedDate(null);
       setSelectedTime("");
+      setDatesWithNoSlots([]);
       setCustomerName("");
       setMeetingEmail("");
       setPhone("");
@@ -516,14 +550,6 @@ export default function Footer() {
             >
               {t.footer.slogan}
             </p>
-
-            <button
-              className="border border-white/50 rounded-full px-8 py-3 text-lg hover:bg-white hover:text-black transition-colors mb-8"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-              suppressHydrationWarning
-            >
-              {t.footer.tryServices}
-            </button>
 
             <form
               onSubmit={handleNewsletterSubmit}
@@ -673,6 +699,7 @@ export default function Footer() {
                     <MeetingCalendar
                       selectedDate={selectedDate}
                       bookedDates={bookedDates}
+                      datesWithNoSlots={datesWithNoSlots}
                       onDateSelect={handleDateSelect}
                     />
                   </div>

@@ -11,7 +11,7 @@ export default function LeftSidebar() {
       {/* Vertical Sidebar - Visible only at xl+ breakpoint (1280px+) */}
       <div className="hidden xl:flex absolute left-0 top-0 z-40">
         {/* Div with border on right side - extends to touch black box */}
-        <div className="h-[780px] xl:h-[780px] 2xl:h-[962px] pl-10 xl:pl-12 pr-3 xl:pr-4 border-r-3 border-black flex flex-col justify-between items-center">
+        <div className="h-[780px] xl:h-[780px] 2xl:h-[962px] border-r-3 border-black flex flex-col justify-between items-center" style={{ width: "90px" }}>
           {/* WATCH INTRO section - top */}
           <div className="flex flex-col items-center gap-2 pt-8 cursor-default pointer-events-none opacity-60">
             <div
