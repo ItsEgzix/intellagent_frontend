@@ -61,11 +61,11 @@ export default function AboutUs() {
       </div>
 
       {/* Text content */}
-      <div className="relative flex flex-col justify-center px-4 md:pl-[170px] md:pr-6 lg:pl-[210px] lg:pr-8 xl:pl-[250px] xl:pr-12 2xl:pl-[200px] 2xl:pr-0">
-        <div className="flex flex-col max-w-6xl mx-auto 2xl:mx-0 2xl:left-[calc(50%-630px)] 2xl:relative">
+      <div className="relative flex flex-col justify-center items-center h-full px-4">
+        <div className="flex flex-col items-center max-w-6xl mx-auto text-center">
           {/* Heading */}
           <h2
-            className="font-sans font-semibold text-white mb-3 md:mb-4 text-start"
+            className="font-sans font-semibold text-white mb-3 md:mb-4"
             style={{
               fontSize: "clamp(32px, 6vw, 80px)",
               lineHeight: "1.1",
@@ -76,7 +76,7 @@ export default function AboutUs() {
 
           {/* Paragraph */}
           <p
-            className="font-sans font-light text-white text-start max-w-[90vw] md:max-w-[80vw] lg:max-w-none"
+            className="font-sans font-light text-white max-w-[90vw] md:max-w-[80vw] lg:max-w-4xl"
             style={{
               fontSize: "clamp(14px, 2vw, 24px)",
               lineHeight: "1.5",
