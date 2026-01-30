@@ -1,8 +1,11 @@
 {
   "header": {
     "aboutUs": "About us",
-    "services": "Our Services",
+    "services": "Our Solutions",
     "useCases": "Use Cases",
+    "research": "Research",
+    "modelsExperiments": "Models & Experiments",
+    "openData": "Open Data",
     "process": "Process",
     "contactUs": "Contact Us"
   },
@@ -19,6 +22,28 @@
   "aboutUs": {
     "heading": "About Us",
     "description": "We specialize in taking your vague requirements and turning them into concrete, working systems. Starting with a Proof of Concept to validate your idea, we then build production-ready solutions that transform your business operations."
+  },
+  "about": {
+    "pageIntro": "Who We Are",
+    "heading": "Builders of Intelligent Systems",
+    "philosophy": {
+      "heading": "Our Philosophy",
+      "points": [
+        "We ship systems, not slide decks.",
+        "Every line of code should earn its place.",
+        "Clarity over complexity. Speed over perfection.",
+        "We build with the user, not just for them."
+      ]
+    },
+    "whyWeExist": {
+      "heading": "Why We Exist",
+      "text": "Most AI projects fail because they're built for demos, not for production. We exist to close that gap. We take messy, undefined problems and turn them into working systems that run autonomously, reliably, and at scale."
+    }
+  },
+  "contact": {
+    "pageIntro": "Let's Talk",
+    "subheading": "Have a project in mind? We'd love to hear about it. Drop us a message and let's explore how we can help you build something intelligent.",
+    "cta": "Get in Touch"
   },
   "aiVoiceAgent": {
     "heading": "AI Voice Agent, for sales and customer support",
@@ -40,30 +65,35 @@
     "buttonAlt": "Let's have a Chá茶t"
   },
   "services": {
-    "heading": "Deliver a high-quality",
+    "heading": "Explore our",
     "headingSmart": "Smart",
-    "headingSystems": "Systems",
+    "headingSystems": "solutions",
     "description": "Connect AI agents with your business tools to automate repetitive tasks, eliminate busywork",
     "services": [
       {
-        "title": "AI Development",
-        "description": "Build custom AI agents tailored to your business needs. From voice agents for sales and customer support to intelligent chatbots that understand your domain, we create AI solutions that integrate seamlessly with your existing systems."
+        "title": "Custom AI Agents",
+        "description": "We build AI agents around real workflows, not generic chatbots. From voice agents for sales and customer support to domain-aware assistants plugged into your internal tools, these agents are designed to operate reliably in production.",
+        "useCases": "Sales • Support • Research • Internal tools"
       },
       {
-        "title": "Agentic Systems",
-        "description": "Design and deploy multi-agent systems where AI agents collaborate to solve complex business problems. Our agentic architectures enable intelligent workflows that can reason, plan, and execute tasks autonomously across your organization."
+        "title": "Agentic Systems & Orchestration",
+        "description": "Some problems need more than one agent. We design multi-agent systems where agents reason, plan, and execute across complex workflows, coordinated through robust orchestration layers. Under the hood, we use state-machine architectures to make these systems observable, debuggable, and reliable at scale.",
+        "useCases": "Complex operations • Decision-heavy workflows • Autonomous processes"
       },
       {
-        "title": "AI Automation",
-        "description": "Transform repetitive business processes into intelligent, self-running systems. Our AI automation solutions eliminate manual work, reduce errors, and free your team to focus on high-value strategic initiatives."
+        "title": "AI-Powered Automation",
+        "description": "We turn repetitive processes into self-running systems. These aren’t brittle scripts. They’re AI-driven workflows that adapt to edge cases, recover from failures, and improve over time. Less manual work. More leverage.",
+        "useCases": "Operations • Data pipelines • Internal automation"
       },
       {
-        "title": "Web Automation",
-        "description": "Automate web-based tasks with our Chromium-powered solutions. From data scraping and form filling to social media management and multi-platform workflows, we handle complex browser automation that works reliably at scale."
+        "title": "Web & Browser Automation",
+        "description": "We build Chromium-powered automation that actually works in the real world. From adaptive web scraping to multi-step platform workflows, our systems handle dynamic layouts, blocks, and constant change. No fragile hacks. No copy-paste bots.",
+        "useCases": "Data collection • Platform workflows • Growth ops"
       },
       {
-        "title": "LangGraph Apps",
-        "description": "Build sophisticated AI applications using LangGraph's state machine architecture. Create complex agent workflows with decision trees, loops, and conditional logic that can handle intricate business processes and multi-step operations."
+        "title": "Research-Driven Builds",
+        "description": "Some work starts as research before it becomes a system. We prototype, experiment, and ship applied research across audio, games, medical RAG, and agent behavior and turn what works into production tools.",
+        "useCases": "R&D • Experimental systems • Long-term bets"
       }
     ]
   },
@@ -72,29 +102,29 @@
     "subtext": "Explore how our AI solutions can transform your business operations"
   },
   "workingProcess": {
-    "heading": "Our Working",
-    "headingProcess": "Process",
-    "description": "Connect AI agents with your business tools to automate repetitive tasks, eliminate busywork, and free your team to focus on growth.",
+    "heading": "The Agentic",
+    "headingProcess": "Workflow",
+    "description": "We don't just write code. We map your entire operational workflow to identify where agents can autonomously act, decision-make, and execute.",
     "steps": [
       {
-        "title": "Requirement Gathering",
-        "description": "We analyze your business needs, identify bottlenecks, and define clear automation goals."
+        "title": "Discovery & Blueprinting",
+        "description": "We don't just ask what you need. We map your entire operational workflow to identify where agents can autonomously act, decision-make, and execute."
       },
       {
-        "title": "Planning and Design",
-        "description": "We architect a tailored AI solution, designing workflows and selecting the best tools for your stack."
+        "title": "Logic & Tool Design",
+        "description": "We define the agent's 'brain'—its instructions, guardrails, and the specific APIs/tools it needs to access your data and perform actions."
       },
       {
-        "title": "Implementation / Development",
-        "description": "We build and integrate custom AI agents to ensure seamless connectivity with your systems."
+        "title": "Development & Integration",
+        "description": "We build the core agent architecture, connecting it securely to your CRM, database, or internal APIs. No black boxes—just clean, auditable code."
       },
       {
-        "title": "Testing & Refinement",
-        "description": "Rigorous testing ensures accuracy and efficiency, with iterative refinement for optimal performance."
+        "title": "Simulation & Alignment",
+        "description": "Before going live, we run the agent in a sandbox environment, simulating thousands of scenarios to ensure it behaves exactly as intended."
       },
       {
-        "title": "Deployment & Support",
-        "description": "We deploy the solution and provide ongoing support to ensure sustained value and adaptability."
+        "title": "Deployment & Orchestration",
+        "description": "We deploy your agents into a monitored environment where they run 24/7. We track performance, cost, and accuracy in real-time."
       }
     ]
   },
@@ -102,28 +132,28 @@
     "heading": "Frequently Asked Questions",
     "questions": [
       {
-        "question": "How can I check the progress of the work?",
-        "answer": "Don't worry, we got you covered. You will have FREE Backend, Frontend and database host. When our system update you with changes, you can view them immediately from the website."
+        "question": "How long does it take to build a custom AI agent?",
+        "answer": "Most projects start with a 2-4 week Proof of Concept phase. From there, a production-ready agent typically takes 6-12 weeks depending on the complexity of integrations and the scope of autonomous capabilities required."
       },
       {
-        "question": "How about maintenance?",
-        "answer": "We provide ongoing maintenance packages to ensure your AI agents and automations continue to perform optimally as your business evolves."
+        "question": "Do you offer a Proof of Concept before full commitment?",
+        "answer": "Absolutely. We strongly recommend starting with a POC. It lets us validate the technical feasibility and demonstrate real value before you commit to a full build. It's the fastest way to see if this is the right solution for you."
       },
       {
-        "question": "Do you have prove of concept?",
-        "answer": "Yes, we can develop a Proof of Concept (POC) to demonstrate the value and feasibility of the proposed solution before full-scale implementation."
+        "question": "What if my requirements change mid-project?",
+        "answer": "That's expected. We build in iterative cycles specifically so we can adapt. Requirements evolve as you see the system in action. We handle scope changes gracefully, as long as we're aligned on priorities."
       },
       {
-        "question": "How secure is IntellAgent?",
-        "answer": "Security is our top priority. We use industry-standard encryption and follow best practices to ensure your data and your clients' data remain safe and confidential."
+        "question": "How secure is my data with IntellAgent?",
+        "answer": "Security is foundational, not an afterthought. We use industry-standard encryption, secure API handling, and strict access controls. Your data and your customers' data are treated with the highest level of confidentiality."
       },
       {
-        "question": "What makes you different from other providers?",
-        "answer": "We focus on creating tailored, fully integrated systems rather than just standalone chatbots. Our solutions are designed to automate entire workflows, not just answer questions."
+        "question": "Can your agents integrate with our existing tools (CRM, Slack, etc.)?",
+        "answer": "Yes. Our agents are designed to connect to real systems. We've integrated with Salesforce, HubSpot, Notion, Slack, custom databases, and many others. If it has an API, we can likely plug into it."
       },
       {
-        "question": "Where does my company need to be based?",
-        "answer": "We operate globally! Since our solutions are cloud-based, we can work with companies located anywhere in the world."
+        "question": "What makes IntellAgent different from other AI vendors?",
+        "answer": "We build systems that act, not just respond. Most vendors offer chatbots. We build autonomous agents that can execute multi-step workflows, make decisions, and integrate deeply into your operations. We focus on production-grade reliability, not just demos."
       }
     ]
   },
@@ -140,5 +170,105 @@
       "contact": "Contact"
     },
     "copyright": "©2025 INTELLAGENT"
+  },
+  "whatWeBuild": {
+    "pageIntro": "Agentic Systems in Production",
+    "heading": "We build AI systems that don’t just respond they act.",
+    "subheading": "Each system here solves a real problem, not a pitch-deck problem.",
+    "projects": [
+      {
+        "title": "Sales Team Automation Agent",
+        "category": "ENTERPRISE AUTOMATION",
+        "problem": "Sales teams waste hours navigating CRM dashboards and piecing together reports to answer basic questions. Critical insights get lost in data sprawl, slowing down deals and decision-making when speed matters most.",
+        "solution": "An AI agent that connects to your CRM and uses specialized tools to instantly surface the data you need delivered in plain English. Instead of building reports or clicking through dashboards, your team simply asks questions and gets answers. The agent handles complex data queries behind the scenes, turning your CRM into a conversational intelligence layer.",
+        "impact": "Cuts report generation time by 60%. Delivers instant answers to questions like 'Which deals are stalling?' or 'What's my team's forecast looking like?'. Eliminates dashboard fatigue your sales data becomes as easy to access as sending a text."
+      },
+      {
+        "title": "Voice Customer Support Agent",
+        "category": "VOICE INTERFACE",
+        "problem": "Your customers hate waiting on hold, and your support team drowns in the same questions every day. Long wait times kill customer satisfaction and drive people to your competitors.",
+        "solution": "An AI phone agent that answers customer calls instantly no hold music, no menus to navigate. It talks like a real person, handles interruptions naturally, and has instant access to all your company knowledge to answer questions accurately. When it can't help, it transfers smoothly to your human team. It can handle hundreds of calls at once, 24/7.",
+        "impact": "Answers 80% of common questions without human help. Zero wait times, even during peak hours. Saves your team from repetitive calls so they can focus on complex issues. Customizable voice and personality to match your brand."
+      },
+      {
+        "title": "Web Intelligence Agent",
+        "category": "INTELLIGENCE OPS",
+        "problem": "You need insights from competitor websites, market data, or public information but manually tracking changes and spotting patterns across multiple sites is impossible at scale.",
+        "solution": "An AI system that continuously monitors the websites you care about, extracts the exact data points you need, and automatically surfaces patterns and insights. We've built it to be incredibly cost-efficient, it doesn't waste resources re-reading entire websites. Instead, it maintains a smart knowledge base and only processes what matters, delivering actionable intelligence in plain English.",
+        "impact": "Tracks competitors, pricing, inventory, or any public data automatically. Spots trends and changes you'd never catch manually. Delivers insights, not spreadsheets, AI explains what the data actually means. Runs continuously at a fraction of the cost of traditional monitoring solutions."
+      },
+      {
+        "title": "WhatsApp Automation (Playwright)",
+        "category": "CONVERSATIONAL LOGIC",
+        "problem": "Businesses need to engage customers where they are, on WhatsApp. But official APIs are often restrictive, and broadcast tools lack true conversational capability.",
+        "solution": "An end-to-end conversational automation system using Playwright. It mimics human interaction patterns to manage complex booking flows, customer queries, and notification systems directly through the web interface.",
+        "impact": "True two-way conversational automation. higher engagement rates. seamless integration into existing support workflows."
+      }
+    ]
+  },
+  "openData": {
+    "pageIntro": "Data Accessibility",
+    "heading": "Empowering AI with Open Data",
+    "subheading": "We believe in transparency and collaboration. Explore our specialized datasets designed to benchmark and improve agentic systems.",
+    "featuredDataset": {
+      "title": "Agent Interaction Logs v1.0",
+      "description": "A high-quality dataset of multi-turn interactions between autonomous agents and complex web interfaces. Cleaned, annotated, and ready for fine-tuning.",
+      "callToAction": "Ready to build better agents?"
+    },
+    "whyItMatters": "Data is the fuel for intelligence. By sharing our research and datasets, we aim to accelerate the development of reliable, safe, and effective AI agents for everyone."
+  },
+  "modelsExperiments": {
+    "subheading": "We explore the bleeding edge of agentic behavior. These are our raw, unfiltered experiments in multi-agent collaboration, autonomous browsing, and cognitive architectures.",
+    "experiments": [
+      {
+        "title": "Project: NEURAL_HIVE",
+        "description": "A swarm intelligence experiment where 50 small LLM agents collaborate to solve complex reasoning puzzles that a single GPT-4 fails at.",
+        "details": "Status: ACTIVE // Efficiency: +400%"
+      },
+      {
+        "title": "Project: DEEP_BROWSE",
+        "description": "Autonomous browser agents that can navigate the hidden web, bypass modern captchas, and structure unstructured data at scale.",
+        "details": "Status: IN_TRAINING // Success Rate: 89%"
+      },
+      {
+        "title": "Project: MEMORY_CORE",
+        "description": "Long-term episodic memory for agents. Enabling them to remember user preferences and past interactions across infinite sessions.",
+        "details": "Status: DEPLOYED // Retention: 99.9%"
+      }
+    ],
+    "philosophy": {
+      "text": "We don’t just build software. We build digital cognition."
+    }
+  },
+  "research": {
+    "heading": "Applied Research & Experimental Interfaces",
+    "toneBlock": "We believe that the future of software interaction is agentic, multimodal, and fluid. Our research division explores the boundaries of what is possible when you combine Large Language Models with real-time audio synthesis, computer vision, and autonomous browser execution. We don't just theorize; we build proofs-of-concept that challenge the status quo of static user interfaces.",
+    "topics": [
+      {
+        "title": "Generative Audio & Voice Synthesis",
+        "status": "ACTIVE",
+        "description": "Investigating low-latency voice pipelines for conversational agents. We focus on interrupting capabilities, emotional modulation, and seamless turn-taking to create indistinguishable human-AI interactions.",
+        "details": "Current benchmarks on our proprietary voice stack show < 500ms latency from audio-input to audio-output."
+      },
+      {
+        "title": "Autonomous Browser Agents",
+        "status": "DEPLOYED",
+        "description": "Developing robust browser automation agents that can navigate complex, dynamic web applications. Unlike traditional scrapers, these agents use vision models to 'see' the page and make decisions based on visual context.",
+        "details": "Successfully navigating modern SPAs with 99% reliability in controlled environments."
+      },
+      {
+        "title": "Multi-Agent Orchestration",
+        "status": "BETA",
+        "description": "Exploring architectures for swarms of specialized agents working together. We are building frameworks where a 'Planner' agent delegates tasks to 'Worker' agents (coders, researchers, writers) to solve complex, multi-step problems autonomously.",
+        "details": "Our 'Swarm' prototype can now independently research a topic, write a report, and generate a slide deck."
+      },
+      {
+        "title": "Generative UI (GenUI)",
+        "status": "CONCEPT",
+        "description": "Moving beyond static dashboards. We are researching interfaces that generate themselves in real-time based on the user's intent and the data at hand. An interface that adapts to you, not the other way around.",
+        "details": "Early prototypes demonstrate dynamic form generation and adaptive data visualization."
+      }
+    ]
   }
 }
+

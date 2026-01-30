@@ -1,45 +1,35 @@
 "use client";
 
-import Header from "./sections/header/header";
 import HeroSection from "./sections/hero/hero-section";
-import ServicesSection from "./sections/services/services-section";
-import IPhoneSection from "./sections/iphone/iphone-section";
-import UseCasesSection from "./sections/use-cases/use-cases-section";
-import WorkingProcessSection from "./sections/working-process/working-process-section";
-import TextLoopSection from "./sections/text-loop/text-loop-section";
+import Image from "next/image";
+import { useI18n } from "./contexts/i18n-context";
+import { motion } from "framer-motion";
 import ContactLoopSection from "./sections/contact-loop/contact-loop-section";
 import FAQSection from "./sections/faq/faq-section";
-import Footer from "./sections/footer/footer";
+import WorkingProcessSection from "./sections/working-process/working-process-section";
+import UseCasesSection from "./sections/use-cases/use-cases-section";
+import TextLoopSection from "./sections/text-loop/text-loop-section";
+import ServicesSection from "./sections/services/services-section";
+import AboutUs from "./sections/about-us/about-us";
 
 export default function Home() {
+  const { t } = useI18n();
+
   return (
-    <div>
-      <Header />
+    <div className="bg-white selection:bg-black selection:text-white overflow-hidden">
       <HeroSection />
+      
 
-      {/* Services Section */}
+
+
+      {/* Sections moved to dedicated pages */}
       <ServicesSection/>
-
-      {/* Custom Section */}
-      <IPhoneSection />
-
-      {/* Use Cases Section */}
       <UseCasesSection />
-
-      {/* Text Loop Section */}
       <TextLoopSection />
-
-      {/* Working Process Section */}
       <WorkingProcessSection />
-
-      {/* Contact Loop Section */}
       <ContactLoopSection />
-
-      {/* FAQ Section */}
       <FAQSection />
-
-      {/* Footer */}
-      <Footer />
+     
     </div>
   );
 }

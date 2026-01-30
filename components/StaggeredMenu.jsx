@@ -1,4 +1,5 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { gsap } from "gsap";
 import "./StaggeredMenu.css";
 
@@ -25,6 +26,7 @@ export const StaggeredMenu = ({
   onMenuClose = undefined,
 }) => {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const openRef = useRef(false);
   const panelRef = useRef(null);
   const preLayersRef = useRef(null);
@@ -45,7 +47,12 @@ export const StaggeredMenu = ({
   const busyRef = useRef(false);
   const itemEntranceTweenRef = useRef(null);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useLayoutEffect(() => {
+    if (!mounted) return;
     const ctx = gsap.context(() => {
       const panel = panelRef.current;
       const preContainer = preLayersRef.current;
@@ -62,7 +69,7 @@ export const StaggeredMenu = ({
       preLayerElsRef.current = preLayers;
 
       const offscreen = position === "left" ? -100 : 100;
-      gsap.set([panel, ...preLayers], { xPercent: offscreen });
+      gsap.set([panel, ...preLayers], { xPercent: offscreen, visibility: "visible" });
       gsap.set(plusH, { transformOrigin: "50% 50%", rotate: 0 });
       gsap.set(plusV, { transformOrigin: "50% 50%", rotate: 90 });
       gsap.set(icon, { rotate: 0, transformOrigin: "50% 50%" });
@@ -71,7 +78,7 @@ export const StaggeredMenu = ({
         gsap.set(toggleBtnRef.current, { color: menuButtonColor });
     });
     return () => ctx.revert();
-  }, [menuButtonColor, position]);
+  }, [menuButtonColor, position, mounted]);
 
   const buildOpenTimeline = useCallback(() => {
     const panel = panelRef.current;
@@ -357,18 +364,9 @@ export const StaggeredMenu = ({
     onMenuClose,
   ]);
 
-  return (
-    <div
-      className={
-        (className ? className + " " : "") +
-        "staggered-menu-wrapper" +
-        (isFixed ? " fixed-wrapper" : "")
-      }
-      style={accentColor ? { ["--sm-accent"]: accentColor } : undefined}
-      data-position={position}
-      data-open={open || undefined}
-    >
-      <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true">
+  const menuPanelContent = (
+    <>
+      <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true" data-position={position}>
         {(() => {
           const raw =
             colors && colors.length
@@ -384,55 +382,24 @@ export const StaggeredMenu = ({
           ));
         })()}
       </div>
-      <header
-        className="staggered-menu-header"
-        aria-label="Main navigation header"
-      >
-        <div className="sm-logo" aria-label="Logo">
-          <img
-            src={logoUrl || "/src/assets/logos/reactbits-gh-white.svg"}
-            alt="Logo"
-            className="sm-logo-img"
-            draggable={false}
-            width={110}
-            height={24}
-          />
-        </div>
-        <button
-          ref={toggleBtnRef}
-          className="sm-toggle"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          aria-controls="staggered-menu-panel"
-          onClick={toggleMenu}
-          type="button"
-        >
-          <span
-            ref={textWrapRef}
-            className="sm-toggle-textWrap"
-            aria-hidden="true"
-          >
-            <span ref={textInnerRef} className="sm-toggle-textInner">
-              {textLines.map((l, i) => (
-                <span className="sm-toggle-line" key={i}>
-                  {l}
-                </span>
-              ))}
-            </span>
-          </span>
-          <span ref={iconRef} className="sm-icon" aria-hidden="true">
-            <span ref={plusHRef} className="sm-icon-line" />
-            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
-          </span>
-        </button>
-      </header>
-
       <aside
         id="staggered-menu-panel"
         ref={panelRef}
         className="staggered-menu-panel"
         aria-hidden={!open}
+        data-position={position}
       >
+        <button
+          className="sm-panel-close"
+          onClick={toggleMenu}
+          aria-label="Close menu"
+        >
+           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+           </svg>
+        </button>
+
         <div className="sm-panel-inner">
           <ul
             className="sm-panel-list"
@@ -481,6 +448,64 @@ export const StaggeredMenu = ({
           )}
         </div>
       </aside>
+    </>
+  );
+
+  return (
+    <div
+      className={
+        (className ? className + " " : "") +
+        "staggered-menu-wrapper" +
+        (isFixed ? " fixed-wrapper" : "")
+      }
+      style={accentColor ? { ["--sm-accent"]: accentColor } : undefined}
+      data-position={position}
+      data-open={open || undefined}
+    >
+      <header
+        className="staggered-menu-header"
+        aria-label="Main navigation header"
+      >
+        <div className="sm-logo" aria-label="Logo">
+          <img
+            src={logoUrl || "/src/assets/logos/reactbits-gh-white.svg"}
+            alt="Logo"
+            className="sm-logo-img"
+            draggable={false}
+            width={110}
+            height={24}
+          />
+        </div>
+        <button
+          ref={toggleBtnRef}
+          className="sm-toggle"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="staggered-menu-panel"
+          onClick={toggleMenu}
+          type="button"
+        >
+          <span
+            ref={textWrapRef}
+            className="sm-toggle-textWrap"
+            aria-hidden="true"
+          >
+            <span ref={textInnerRef} className="sm-toggle-textInner">
+              {textLines.map((l, i) => (
+                <span className="sm-toggle-line" key={i}>
+                  {l}
+                </span>
+              ))}
+            </span>
+          </span>
+          <span ref={iconRef} className="sm-icon" aria-hidden="true">
+            <span ref={plusHRef} className="sm-icon-line" />
+            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
+          </span>
+        </button>
+      </header>
+
+      {mounted && createPortal(menuPanelContent, document.body)}
     </div>
   );
 };

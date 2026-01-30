@@ -21,16 +21,27 @@ export default function ServicesSection({ children }: ServicesSectionProps) {
           {t.services.headingSystems}
         </>
       }
-      description={t.services.description}
-      items={t.services.services}
+      description={t.services.description} // Keeping description as prop but it might not be rendered in this variant if we chose to hide it, or we can update ContentSection to render it if needed.
+      items={t.services.services.map((service, index) => ({
+        ...service,
+        // Map abstract geometric assets to services
+        icon: "/elements/grid_logo.svg",
+        // Map specific images
+        image: [
+          "/services/1592.jpg", // Custom AI Agents
+          "/services/2062.jpg",     // Agentic Systems
+          "/services/broccoli-silhouette-isolated-black.jpg", // Automation
+          "/services/1527.jpg",     // Web Automation
+          "/services/scientist-scrutinizes.jpg" // Research
+        ][index]
+      }))}
       logo={{
         src: "/elements/grid_logo.svg",
         alt: "Grid Logo",
         width: 468,
         height: 384,
       }}
-    >
-      {children}
-    </ContentSection>
+      variant="centered-light"
+    />
   );
 }

@@ -6,7 +6,8 @@ import { AuthProvider } from "./contexts/auth-context";
 import { AutomationProvider } from "./contexts/automation-context";
 import { FloatingAIEntry } from "@/components/floating-ai-entry";
 import { ToastProvider } from "./contexts/toast-context";
-
+import Header from "./sections/header/header";
+import Footer from "./sections/footer/footer";
 const dmSans = localFont({
   src: [
     {
@@ -138,13 +139,17 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+
+
+// ... existing code ...
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${dmSans.variable} ${beatriceDisplay.variable} ${spaceGrotesk.variable} ${pixelifySans.variable}`}
         suppressHydrationWarning
@@ -153,8 +158,10 @@ export default function RootLayout({
           <AuthProvider>
             <AutomationProvider>
               <ToastProvider>
+                <Header />
                 {children}
-                <FloatingAIEntry />
+                <Footer />
+                {/* <FloatingAIEntry /> */}
               </ToastProvider>
             </AutomationProvider>
           </AuthProvider>

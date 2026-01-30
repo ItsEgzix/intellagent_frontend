@@ -11,193 +11,120 @@ import { techLogos } from "@/data/technologies";
 export default function HeroSection() {
   const { t } = useI18n();
 
-  // Memoize subtitle rendering to prevent hydration mismatches
-  const subtitleContent = useMemo(() => {
-    const subtitle = t.hero.subtitle;
-    // Only apply Pixelify Sans to "Smart" in English
-    if (subtitle.includes("Smart")) {
-      const parts = subtitle.split("Smart");
-      return parts.map((part, index) => (
-        <span key={index}>
-          {part}
-          {index < parts.length - 1 && (
-            <span
-              style={{
-                fontFamily: "var(--font-pixelify-sans)",
-              }}
-            >
-              Smart
-            </span>
-          )}
-        </span>
-      ));
-    }
-    return subtitle;
-  }, [t.hero.subtitle]);
-
   return (
     <>
       <LeftSidebar />
-      <section className="relative pt-16 md:pt-20 lg:pt-0 pb-0">
-        <div className="mx-auto max-w-[1920px] relative w-full px-4 md:px-6 lg:px-0">
-          {/* Hero text section */}
-          <div
-            className="relative w-full"
-            style={{
-              height: "clamp(300px, 50vw, 962px)",
-            }}
-          >
-            <div
-              className="absolute flex flex-col z-20 hero-text-section left-4 md:left-6 lg:left-8 xl:left-[100px] 2xl:left-[calc(50%-630px)]"
-              style={{
-                top: "clamp(110px, 20vw, 420px)",
-                width: "clamp(95vw, 90vw, 1000px)",
-                maxWidth: "clamp(95vw, 90vw, 1000px)",
-                paddingRight: "clamp(16px, 2vw, 32px)",
-              }}
-            >
-              {/* Top line */}
-              <div
-                className="flex flex-wrap items-center mb-2 md:mb-3"
+      <section className="relative w-full h-[90vh] min-h-[700px] flex flex-col justify-center items-center bg-white overflow-hidden border-b-2 border-black">
+        
+        {/* Abstract Background Elements */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+            {/* Grid Texture */}
+             <div 
+                className="absolute inset-0 opacity-[0.03]"
                 style={{
-                  gap: "clamp(8px, 1.5vw, 16px)",
+                    backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
+                    backgroundSize: "40px 40px"
                 }}
-              >
-                <span
-                  className="text-black"
-                  style={{
-                    fontFamily:
-                      "var(--font-beatrice-display), 'Microsoft YaHei', 'PingFang SC', sans-serif",
-                    fontSize: "clamp(28px, 5vw, 80px)",
-                    fontWeight: 400,
-                  }}
-                >
-                  {t.hero.letUs}
-                </span>
-                <a
-                  href="https://wa.me/601139282725"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block"
-                >
-                  <Image
-                    src="/elements/Lets_have_chat_1920.svg"
-                    alt="Let's have a Chát"
-                    width={249}
-                    height={77}
-                    className="h-auto cursor-pointer hover:opacity-80 transition-opacity"
-                    style={{
-                      width: "clamp(120px, 15vw, 249px)",
-                    }}
-                  />
-                </a>
-                <span
-                  className="text-black"
-                  style={{
-                    fontFamily:
-                      "var(--font-beatrice-display), 'Microsoft YaHei', 'PingFang SC', sans-serif",
-                    fontSize: "clamp(28px, 5vw, 80px)",
-                    fontWeight: 400,
-                  }}
-                >
-                  {t.hero.buildYour}
-                </span>
-              </div>
-
-              {/* Second line */}
-              <div
-                className="flex flex-wrap items-center mb-4 md:mb-6"
-                style={{
-                  gap: "clamp(8px, 1.5vw, 16px)",
-                }}
-              >
-                <span
-                  className="text-black"
-                  style={{
-                    fontFamily:
-                      "var(--font-beatrice-display), 'Microsoft YaHei', 'PingFang SC', sans-serif",
-                    fontSize: "clamp(32px, 5.5vw, 80px)",
-                    fontWeight: 600,
-                  }}
-                >
-                  {t.hero.customAIAgent}
-                </span>
-                {/* Slider element */}
-                <div className="flex items-center gap-2">
-                  <Image
-                    src="/elements/yellow_circle_1920.svg"
-                    alt="Slider"
-                    width={156}
-                    height={56}
-                    className="h-auto"
-                    style={{
-                      width: "clamp(80px, 10vw, 156px)",
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Sub text */}
-              <p
-                className="text-gray-600 font-sans max-w-[90vw] md:max-w-[80vw] lg:max-w-none mb-16 md:mb-0"
-                style={{
-                  fontSize: "clamp(14px, 2vw, 24px)",
-                  fontWeight: 300,
-                  lineHeight: "1.5",
-                }}
-              >
-                {subtitleContent}
-              </p>
-            </div>
-          </div>
-          {/* Yellow box - mobile/tablet */}
-          <div
-            className="block lg:hidden w-screen relative left-1/2 -translate-x-1/2"
-            style={{
-              marginTop: "clamp(64px, 15vw, 0px)",
-            }}
-          >
-            <div
-              className="w-full overflow-hidden"
-              style={{
-                height: "clamp(260px, 50vw, 360px)",
-              }}
-            >
-              <Image
-                src="/elements/Yellow squar 1920px.svg"
-                alt="Yellow Square"
-                width={620}
-                height={662}
-                className="h-full w-full object-cover"
-                priority
-              />
-            </div>
-          </div>
-
-          {/* Yellow box - desktop */}
-          <div
-            className="hidden lg:block absolute right-0 bottom-0"
-            style={{
-              top: "clamp(100px, 15vw, 300px)",
-              width: "clamp(300px, 32vw, 620px)",
-            }}
-          >
-            <Image
-              src="/elements/Yellow squar 1920px.svg"
-              alt="Yellow Square"
-              width={620}
-              height={662}
-              className="h-full w-full object-cover"
-              priority
-            />
-          </div>
+             />
+             
+             {/* Large 'A' Logo Background */}
+             <div className="absolute right-[-5%] bottom-[-10%] w-[50vw] h-[70vh] pointer-events-none">
+                <Image
+                  src="/logo/A logo yellow.svg"
+                  alt="A Logo Background"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+             </div>
         </div>
+
+        {/* Main Content Container - Blueprint/Manifesto Style */}
+        <div className="relative z-10 container mx-auto px-6 max-w-7xl">
+            
+            {/* Top Meta Labels */}
+            <div className="flex justify-between items-end border-b-2 border-black pb-4 mb-12">
+                <div className="flex flex-col">
+                    <span className="font-mono text-xs font-bold tracking-widest uppercase mb-1">AGENCY_OS</span>
+                    <span className="font-mono text-xs tracking-widest text-gray-500">V.1.0 // SYSTEM_ACTIVE</span>
+                </div>
+                <div className="hidden md:flex gap-8">
+                     <span className="font-mono text-xs tracking-widest text-gray-500">LATENCY: 0ms</span>
+                     <span className="font-mono text-xs tracking-widest text-gray-500 text-green-600">● ONLINE</span>
+                </div>
+            </div>
+
+            {/* Main Headline Block */}
+            <div className="flex flex-col gap-2">
+                <h1 
+                    className="text-8xl md:text-[9rem] lg:text-[11rem] leading-[0.85] tracking-tighter text-black uppercase"
+                    style={{ fontFamily: "var(--font-beatrice-display)" }}
+                >
+                    Build
+                </h1>
+                
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-12">
+                    <h1 
+                        className="text-8xl md:text-[9rem] lg:text-[11rem] leading-[0.85] tracking-tighter text-black uppercase"
+                        style={{ fontFamily: "var(--font-beatrice-display)" }}
+                    >
+                         What&apos;s Next
+                    </h1>
+
+                </div>
+                
+                 <div className="flex items-center gap-4 mt-4">
+                     <div className="h-2 w-24 bg-black"></div>
+                     <h1 
+                        className="text-4xl md:text-6xl tracking-tight text-gray-400 italic"
+                        style={{ fontFamily: "var(--font-beatrice-display)" }}
+                    >
+                        into working reality.
+                    </h1>
+                 </div>
+            </div>
+
+            {/* Subtitle / Mission */}
+            <div className="mt-16 max-w-2xl border-l-2 border-black pl-8 ml-2">
+                <p className="font-mono text-lg md:text-xl text-gray-800 leading-relaxed">
+                   {t.hero.subtitle}
+                </p>
+                <div className="mt-8 flex items-center gap-4">
+                     <a
+                        href="https://wa.me/601139282725"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center gap-4 hover:opacity-80 transition-opacity duration-300"
+                      >
+                        <Image
+                          src="/elements/Lets_have_chat_1920.svg"
+                          alt="Let's have a chat"
+                          width={249}
+                          height={77}
+                          className="h-16 w-auto"
+                        />
+                      </a>
+                </div>
+            </div>
+
+        </div>
+
+        {/* Absolute Decorative Tech Elements */}
+        <div className="absolute top-1/3 right-12 hidden lg:block">
+            <div className="flex flex-col gap-2 opacity-20">
+                <div className="w-16 h-[2px] bg-black"></div>
+                 <div className="w-8 h-[2px] bg-black"></div>
+                  <div className="w-24 h-[2px] bg-black"></div>
+            </div>
+        </div>
+
       </section>
-      {/* Black box positioned directly below yellow box - outside container for full width */}
-      <AboutUs />
+
       {/* Horizontal Sidebar - appears under black box at md-xl breakpoint */}
       <HorizontalSidebar />
+       
       {/* Logo Loop - appears under horizontal sidebar */}
+      
       <div className="w-full py-8 md:py-12 bg-white">
         <SocialLoop
           items={techLogos}
@@ -211,6 +138,10 @@ export default function HeroSection() {
           fullWidth={false}
         />
       </div>
+      <AboutUs/>
+      
+
+     
     </>
   );
 }

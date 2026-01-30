@@ -256,3 +256,25 @@
     height: 425px !important;
   }
 }
+
+/* Desktop staggered menu overrides */
+.desktop-staggered-menu {
+  width: auto;
+  height: auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.desktop-staggered-menu .staggered-menu-header {
+  position: static;
+  width: auto;
+  padding: 0;
+  pointer-events: auto;
+}
+
+.desktop-staggered-menu .sm-logo {
+  display: none;
+}
