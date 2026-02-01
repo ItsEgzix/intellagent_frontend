@@ -21,7 +21,7 @@
   },
   "aboutUs": {
     "heading": "About Us",
-    "description": "We specialize in taking your vague requirements and turning them into concrete, working systems. Starting with a Proof of Concept to validate your idea, we then build production-ready solutions that transform your business operations."
+    "description": "We specialize in taking your high-level requirements and turning them into concrete, working systems. Starting with a Proof of Concept to validate your idea, we then build production-ready solutions that transform your business operations."
   },
   "about": {
     "pageIntro": "Who We Are",
@@ -37,7 +37,7 @@
     },
     "whyWeExist": {
       "heading": "Why We Exist",
-      "text": "Most AI projects fail because they're built for demos, not for production. We exist to close that gap. We take messy, undefined problems and turn them into working systems that run autonomously, reliably, and at scale."
+      "text": "Most AI projects fail because they're built for demos, not for production. We exist to close that gap. We take complex, evolving problems and turn them into working systems that run autonomously, reliably, and at scale."
     }
   },
   "contact": {
