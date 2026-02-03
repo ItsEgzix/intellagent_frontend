@@ -9,9 +9,9 @@ export default function LeftSidebar() {
   return (
     <>
       {/* Vertical Sidebar - Visible only at xl+ breakpoint (1280px+) */}
-      <div className="hidden xl:flex absolute left-0 top-0 z-40">
+      <div className="hidden xl:flex absolute left-0 top-0 bottom-0 z-40">
         {/* Div with border on right side - extends to touch black box */}
-        <div className="h-[740px] xl:h-[780px] 2xl:h-[957px] border-r-2 border-black flex flex-col justify-between items-center" style={{ width: "90px" }}>
+        <div className="h-full border-r-2 border-black flex flex-col justify-between items-center" style={{ width: "90px" }}>
           {/* WATCH INTRO section - top */}
           <div className="flex flex-col items-center gap-2 pt-8 cursor-default pointer-events-none opacity-60">
             <div
